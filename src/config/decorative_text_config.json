@@ -1,0 +1,56 @@
+{
+  "client_header": {
+    "logo": {
+      "text": "MetraTech"
+    },
+    "tab": {
+      "button": [
+        {
+          "text": "首页",
+          "route": "/article"
+        },
+        {
+          "text": "数据分析",
+          "route": "/portfolio"
+        },
+        {
+          "text": "模型预测",
+          "route": "/about"
+        }
+      ]
+    }
+  },
+  "index_pages": {
+    "describe": {
+      "eng_title": "01.&nbsp;&nbsp;&nbsp;MeteoDataAnalysisAndPrediction",
+      "cn_title": "信创技术下<br/>气象数据分析预测系统",
+      "cn_des": "信创技术下气象数据分析预测系统，其主要目标是：基于信创CPU、信创开发板、信创操作系统，从架设的小型气象设备中采集气象相关数据，包括，温度、湿度、风速、风向、降雨量、光照、PM2.5、PM10等数据，通过边缘计算、聚合，将数据上传到云端服务器或中心数据服务器存储，再通过数据处理软件进行数据清洗、分析、处理，最后以友好的方式展示给前端用户。业务过程涵盖了软件技术专业所涉及的各方面相关技术。",
+      "start_text": "立即开始",
+      "register_text": "注册"
+    },
+    "banner": {
+      "card": [
+        {
+          "title": "多种类型查询",
+          "des": "支持根据分钟、小时、一天、任意时间段和复杂条件查询",
+          "img": "multiple-types-of-queries.png"
+        },
+        {
+          "title": "数据可视化",
+          "des": "基于Echarts.js实现数据可视化,更友好的数据分析体验",
+          "img": "data-visualization.png"
+        },
+        {
+          "title": "多模型预测",
+          "des": "训练LSTM、ARIMA和Prophet模型,智能或手动加权平均预测结果",
+          "img": "multi-model-prediction.png"
+        },
+        {
+          "title": "相关性分析",
+          "des": "气象数据具有八个特征值,分析温度、湿度、风速、风向、降雨量、光照、PM2.5、PM10等数据相关性",
+          "img": "correlation_analysis.png"
+        }
+      ]
+    }
+  }
+}
