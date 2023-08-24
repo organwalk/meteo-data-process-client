@@ -1,0 +1,69 @@
+{
+  "query": {
+    "card": [
+      {
+        "eng_type":"Query by minute",
+        "cn_type": "分钟数据查询",
+        "cn_des": "以分钟为单位，查询指定日期的某一个小时的气象数据变化数据。结果集中将包含六十条数据值"
+      },
+      {
+        "eng_type":"Query by hour",
+        "cn_type": "小时数据查询",
+        "cn_des": "以小时为单位，查询指定日期的某一天的气象数据变化数据。结果集中将包含二十四条数据值"
+      },
+      {
+        "eng_type":"Query by day",
+        "cn_type": "时段数据查询",
+        "cn_des": "以一天为单位，查询指定时间段的气象数据变化数据。结果集中将包含与指定天数相等条数的数据值"
+      },
+      {
+        "eng_type":"Query by condition",
+        "cn_type": "复合条件查询",
+        "cn_des": "查询指定气象要素范围条件的气象数据变化数据。结果集中将包含匹配用户指定复合条件的数据值"
+      }
+    ]
+  },
+  "container":{
+    "chart": {
+      "title": "2023-06-27日气象数据",
+      "MeteoElements": [
+        {
+          "value":"1",
+          "label":"温度"
+        },
+        {
+          "value":"2",
+          "label":"湿度"
+        },
+        {
+          "value":"3",
+          "label":"风速"
+        },
+        {
+          "value":"5",
+          "label":"降雨量"
+        },
+        {
+          "value":"6",
+          "label":"光照"
+        },
+        {
+          "value":"7",
+          "label":"PM25"
+        },
+        {
+          "value":"8",
+          "label":"PM10"
+        }
+      ]
+    },
+    "server": {
+      "title": "气象数据获取服务概览",
+      "card": {
+        "station_name": "站点名称",
+        "start_date": "启动日期",
+        "running_status": "运行状况"
+      }
+    }
+  }
+}

@@ -4,12 +4,15 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import buttonAutoLoseFocus from "@/config/button-auto-lose-focus";
 import RouterIndex from '@/router/index'
+import store from '@/store'
 
 const app = createApp(App)
 app.use(ElementPlus)
 app.use(RouterIndex)
 app.use(buttonAutoLoseFocus)
+app.use(store)
 app.mount('#app')
+
 
 /**
  * ----- 此处无需维护 -----

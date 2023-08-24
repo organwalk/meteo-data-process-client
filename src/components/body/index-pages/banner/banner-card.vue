@@ -1,7 +1,7 @@
 <template>
     <br/>
     <el-card class="banner-card"
-             v-for="(card, index) in decorative.index_pages.banner.card"
+             v-for="(card, index) in config.banner.card"
              :key="card"
              :style="{ 'animation-delay': getAnimationDelay(index) }"
     >
@@ -20,15 +20,9 @@
 </template>
 
 <script setup>
-import decorative from "@/config/decorative_text_config.json"
+import config from "@/config/index-page-config.json"
+import {getImagePath, getAnimationDelay} from "@/utils/utils"
 
-const getImagePath = (img) => {
-    return require('@/assets/' + img);
-}
-const getAnimationDelay = (index) => {
-    const delay = 0.5;
-    return `${index * delay}s`;
-}
 </script>
 
 <style scoped>

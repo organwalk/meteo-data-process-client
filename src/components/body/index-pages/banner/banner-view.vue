@@ -3,7 +3,7 @@
         <el-card class="banner" shadow="never">
             <el-row>
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <body-index-pages-banner-card/>
+                    <banner-card/>
                 </el-col>
             </el-row>
         </el-card>
@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import BodyIndexPagesBannerCard from "@/components/body/index-pages/body-index-pages-banner-card.vue";
+import BannerCard from "@/components/body/index-pages/banner/banner-card.vue";
 </script>
 
 <style scoped>

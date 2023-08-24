@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from "./router"
+import {ElMessage} from "element-plus";
 
 const router =createRouter({
     history:createWebHistory(),
@@ -7,11 +8,14 @@ const router =createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if (!sessionStorage.getItem("authInfo")) {
+    if (!sessionStorage.getItem("auth")) {
         if (to.name !== "main"){
             next()
         }else {
-            window.location.href = "/index"
+            ElMessage.warning("您尚未登录")
+            setTimeout(()=>{
+                window.location.href = "/index"
+            },1000)
         }
     } else {
         next()

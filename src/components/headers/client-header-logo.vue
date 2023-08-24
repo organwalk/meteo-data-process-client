@@ -1,13 +1,13 @@
 <template>
     <el-col :xs="8" :sm="6" :md="4" :lg="8" :xl="1" align="left">
-        <h2 @click="nextToIndex">{{ decorative.client_header.logo.text }}</h2>
+        <h2 @click="nextToIndex">{{ config.logo.text }}</h2>
     </el-col>
 </template>
 
 <script setup>
-import decorative from "@/config/decorative_text_config.json"
+import config from "@/config/client-header-config.json"
 const nextToIndex = () => {
-    window.location.href = "/"
+    window.location.href = "/index"
 }
 </script>
 

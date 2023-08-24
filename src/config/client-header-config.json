@@ -1,0 +1,22 @@
+{
+  "logo": {
+    "text": "MetraTech"
+  },
+  "tab": {
+    "button": [
+      {
+        "text": "首页",
+        "route": "/"
+      },
+      {
+        "text": "数据分析",
+        "route": "/portfolio"
+      },
+      {
+        "text": "模型预测",
+        "route": "/about"
+      }
+    ],
+    "sign_out":"Sign out"
+  }
+}

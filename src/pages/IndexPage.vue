@@ -1,10 +1,10 @@
 <template>
-    <el-row style="height: 80vh">
+    <el-row style="height: 90vh">
         <el-col :xs="8" :sm="6" :md="4" :lg="1" :xl="1" />
         <el-col :xs="8" :sm="6" :md="4" :lg="22" :xl="1" >
             <el-row :gutter="20">
-                <body-index-pages-describe/>
-                <body-index-pages-banner/>
+                <describe-view/>
+                <banner-view/>
             </el-row>
         </el-col>
       <el-col :xs="8" :sm="6" :md="4" :lg="1" :xl="1" />
@@ -12,8 +12,8 @@
 </template>
 
 <script setup>
-import BodyIndexPagesDescribe from "@/components/body/index-pages/body-index-pages-describe.vue";
-import BodyIndexPagesBanner from "@/components/body/index-pages/body-index-pages-banner.vue";
+import DescribeView from "@/components/body/index-pages/describe/describe-view.vue";
+import BannerView from "@/components/body/index-pages/banner/banner-view.vue";
 </script>
 
 <style scoped>
