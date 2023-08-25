@@ -23,7 +23,7 @@ const props = defineProps({
     font-family: 微软雅黑,serif;
     user-select: none;
     margin-top: 4vh;
-    height: 20vh;
+    height: 15vh;
 }
 .server-card-title{
     font-weight: bolder;

@@ -5,7 +5,7 @@
               <span v-html="config.container.server.title"/>
           </el-col>
           <el-col :xs="8" :sm="6" :md="4" :lg="4" :xl="1" >
-              <el-select v-model="serverData.selectStation" @change="changeStationCode()">
+              <el-select v-model="serverData.selectStation" >
                   <el-option
                           v-for="item in serverData.storeStationList"
                           :key="item.station"
@@ -19,7 +19,8 @@
           <container-server-card :card-data="{title:config.container.server.card.station_name,content:serverData.stationName}"/>
           <container-server-card :card-data="{title:config.container.server.card.start_date,content:serverData.startDate}"/>
           <container-server-card :card-data="{title:config.container.server.card.running_status,content:'正常'}"/>
-      </el-row>
+      </el-row><br/>
+      <container-server-collection/>
   </el-card>
 </template>
 
@@ -30,6 +31,7 @@ import {computed, reactive, watchEffect} from "vue";
 import ContainerServerCard from "@/components/body/main-pages/container/container-server-card.vue";
 import {getStartDate} from "@/service/station-service";
 import {ElMessage} from "element-plus";
+import ContainerServerCollection from "@/components/body/main-pages/container/container-server-collection.vue";
 
 const store = useStore()
 const serverData = reactive({
@@ -43,7 +45,8 @@ watchEffect(async () => {
     if (serverData.storeStationList.length !== 0) {
         serverData.selectStation = serverData.storeStationList[0].station
     }
-    if (serverData.selectStation) {
+    if (serverData.selectStation){
+        await store.dispatch('updateNowStation', serverData.selectStation)
         serverData.stationName = serverData.storeStationList.find((item) => {
             return item.station === serverData.selectStation
         }).name
@@ -61,10 +64,16 @@ watchEffect(async () => {
     border-radius: 15px;
     user-select: none;
     font-family: 微软雅黑,serif;
-    height: 35vh;
+    height: 95vh;
 }
 #container-server span{
     font-weight: bolder;
     font-size: larger;
+}
+:deep(.el-input__wrapper) {
+    box-shadow: none;
+}
+:deep(.el-select:hover:not(.el-select--disabled) .el-input__wrapper){
+    box-shadow: none;
 }
 </style>

@@ -3,5 +3,8 @@ export default {
         loading:false,
         error:false
     },
-    stationList:[]
+    stationList:[],
+    nowStation:'',
+    nowPickMonth:'',
+    queryType:''
 }

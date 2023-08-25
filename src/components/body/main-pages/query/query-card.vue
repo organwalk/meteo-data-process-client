@@ -10,13 +10,18 @@
 
 <script setup>
 import config from "@/config/main-page-config.json";
-import {ref} from "vue";
+import {ref, watchEffect} from "vue";
+import {useStore} from "vuex";
 
+const store = useStore()
 const type = ref(null)
 
-const toQuery = (val) => {
-    type.value = val
+const toQuery = async (val) => {
+    await store.dispatch('updateQueryType',val)
 }
+watchEffect(()=>{
+    type.value = store.state.mainPages.queryType
+})
 </script>
 
 <style scoped>
@@ -27,7 +32,7 @@ const toQuery = (val) => {
     height: 27vh;
 }
 #query-card:hover{
-    background-color: #409EFF;
+    background-color: #337ecc;
     color: #ffffff;
     height: 30vh;
 }

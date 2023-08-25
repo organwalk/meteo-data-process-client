@@ -15,14 +15,12 @@
 </template>
 
 <script setup>
-import {useRouter} from "vue-router";
 import config from "@/config/client-header-config.json"
 import {ref, watchEffect} from "vue";
 import {signOutSystem} from "@/service/auth-service";
 
-const router = useRouter()
 const pushRouter = (route) => {
-    router.push(route)
+    window.location.href = route
 }
 const showSignOut = ref(false)
 watchEffect(()=>{

@@ -1,7 +1,7 @@
 import * as echarts from "echarts";
 
 export function getADayMeteoChart(meteoDataList) {
-    const myChart = echarts.init(document.getElementById('myChart'));
+    const myChart = echarts.init(document.getElementById('aDayMeteoChart'));
     myChart.setOption({
         xAxis: {
             type: 'category',

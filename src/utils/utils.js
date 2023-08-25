@@ -1,5 +1,18 @@
 import {ElMessage} from "element-plus";
 
+export function buildQueryURL(endpoint, params) {
+    let url = endpoint + '?';
+    const keys = Object.keys(params);
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const value = params[key];
+        url += `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        if (i !== keys.length - 1) {
+            url += '&';
+        }
+    }
+    return url;
+}
 export function getImagePath(img){
     return require('@/assets/' + img);
 }
@@ -16,3 +29,52 @@ export function checkOnlyEngAndNumber(str){
     }
         return false
     }
+
+export function getDisabledDate(date,validDates){
+    return !validDates.value.includes(getGMTTimeToStrISO8601(date));
+}
+
+export function getGMTTimeToStrISO8601(date){
+    return date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
+}
+
+export function checkMeteoElementsNotNull(val){
+    ElMessage.warning("必须选择一个气象要素")
+    return [val]
+}
+
+export function extractLabels(valuesArray, originalArray) {
+    let labels = [];
+    valuesArray.forEach(function(value) {
+        let item = originalArray.find(function(obj) {
+            return obj.value === value;
+        });
+        if (item) {
+            labels.push(item.label);
+        }
+    });
+    labels.unshift("采集时间")
+    return labels;
+}
+
+export function convertToObjectArrayFrom2DArray(Array2D, labelArray) {
+    let objectsArray = [];
+    Array2D.forEach(function(data) {
+        let object = {};
+
+        data.forEach(function(value, index) {
+            let label = labelArray[index];
+            object[label] = value;
+        });
+
+        objectsArray.push(object);
+    });
+    return objectsArray;
+}
+
+export function getPageData(tableData,total){
+    return {
+        size:tableData.value.length,
+        count:String(Math.round(total.value/10))
+    }
+}

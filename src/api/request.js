@@ -13,7 +13,7 @@ const request = (config) => {
         error => {
             if (error.response) {
                 // 响应状态码为 500
-                if (error.response.data.status === 500) {
+                if (error.response.status === 500) {
                     ElMessage.error("内部服务错误，请稍后再试")
                 }
                 // 响应状态码为 404

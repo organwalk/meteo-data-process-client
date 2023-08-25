@@ -2,17 +2,17 @@
   "query": {
     "card": [
       {
-        "eng_type":"Query by minute",
+        "eng_type":"Query by hour",
         "cn_type": "分钟数据查询",
         "cn_des": "以分钟为单位，查询指定日期的某一个小时的气象数据变化数据。结果集中将包含六十条数据值"
       },
       {
-        "eng_type":"Query by hour",
+        "eng_type":"Query by day",
         "cn_type": "小时数据查询",
         "cn_des": "以小时为单位，查询指定日期的某一天的气象数据变化数据。结果集中将包含二十四条数据值"
       },
       {
-        "eng_type":"Query by day",
+        "eng_type":"Query by date",
         "cn_type": "时段数据查询",
         "cn_des": "以一天为单位，查询指定时间段的气象数据变化数据。结果集中将包含与指定天数相等条数的数据值"
       },
@@ -63,6 +63,68 @@
         "station_name": "站点名称",
         "start_date": "启动日期",
         "running_status": "运行状况"
+      }
+    },
+    "collection": {
+      "overview_title": "气象数据采集概览",
+      "analyze": {
+        "title": "数据质量分析",
+        "empty_img": "analyze-empty.png",
+        "empty_des": "暂无分析报告，等待后续提供"
+      }
+    },
+    "query": {
+      "header": {
+        "button": "Back",
+        "Query by hour": {
+          "title": "分钟数据查询"
+        },
+        "Query by day": {
+          "title": "小时数据查询"
+        },
+        "Query by date": {
+          "title": "时段数据查询"
+        },
+        "Query by condition": {
+          "title": "复合条件查询"
+        }
+      },
+      "form": {
+        "collapse_title": "展开面板填写查询气象数据所需信息",
+        "meteo_elements": [
+          {
+            "value":"1",
+            "label":"温度"
+          },
+          {
+            "value":"2",
+            "label":"湿度"
+          },
+          {
+            "value":"3",
+            "label":"风速"
+          },
+          {
+            "value":"4",
+            "label":"风向"
+          },
+          {
+            "value":"5",
+            "label":"降雨量"
+          },
+          {
+            "value":"6",
+            "label":"光照"
+          },
+          {
+            "value":"7",
+            "label":"PM25"
+          },
+          {
+            "value":"8",
+            "label":"PM10"
+          }
+        ]
       }
     }
   }

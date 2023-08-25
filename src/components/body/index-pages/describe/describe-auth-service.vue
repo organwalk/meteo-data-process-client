@@ -18,7 +18,7 @@
                               v-show="authServiceData.showPassword"
                               :placeholder="config.describe.auth.service.password_place"
                               :prefix-icon="Check"
-                              @keyup.enter="loginToSystem()"
+                              @keyup.enter="authToSystem()"
                               type="password"
                               show-password
                               size="large"/>
