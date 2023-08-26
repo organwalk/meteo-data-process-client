@@ -10,11 +10,11 @@
       },
       {
         "text": "数据分析",
-        "route": "/portfolio"
+        "route": "/dataAnalyze"
       },
       {
         "text": "模型预测",
-        "route": "/about"
+        "route": "/modelPrediction"
       }
     ],
     "sign_out":"Sign out"

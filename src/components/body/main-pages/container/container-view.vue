@@ -1,20 +1,19 @@
 <template>
     <el-col :xs="8" :sm="6" :md="4" :lg="18" :xl="1" >
-        <el-card id="container" shadow="never">
-            <div class="container-chart-server" v-if="queryStore === ''">
-                <container-chart/><br/>
-                <container-server/><br/>
-            </div>
-            <container-query class="container-query" v-if="queryStore !== ''"/>
-            <br/>
+        <el-card id="container" shadow="never" v-if="queryStore === ''">
+            <chart-view/><br/>
+            <server-view/><br/>
+        </el-card>
+        <el-card id="container" shadow="never" v-if="queryStore !== ''">
+            <query-view class="container-query" /><br/>
         </el-card>
     </el-col>
 </template>
 
 <script setup>
-import ContainerChart from "@/components/body/main-pages/container/container-chart.vue";
-import ContainerServer from "@/components/body/main-pages/container/container-server.vue";
-import ContainerQuery from "@/components/body/main-pages/container/container-query.vue";
+import ChartView from "@/components/body/main-pages/container/chart/chart-view.vue";
+import ServerView from "@/components/body/main-pages/container/server/server-view.vue";
+import QueryView from "@/components/body/main-pages/container/query/query-view.vue";
 import {computed} from "vue";
 import {useStore} from "vuex";
 

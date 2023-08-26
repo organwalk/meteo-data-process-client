@@ -124,7 +124,13 @@
             "value":"8",
             "label":"PM10"
           }
-        ]
+        ],
+        "label": {
+          "station": "选择气象站点",
+          "meteo_elements": "选择气象要素",
+          "time_elements": "选择时间要素",
+          "condition": "填写复合条件"
+        }
       }
     }
   }

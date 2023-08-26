@@ -1,4 +1,9 @@
-import {getMeteoDataByDate, getMeteoDataByDay, getMeteoDataByHour} from "@/api/meteo-data/api-meteo-data";
+import {
+    getMeteoDataByComplex,
+    getMeteoDataByDate,
+    getMeteoDataByDay,
+    getMeteoDataByHour, getMeteoModelInfo
+} from "@/api/meteo-data/api-meteo-data";
 import {extractLabels} from "@/utils/utils";
 import config from "@/config/main-page-config.json";
 import {ElMessage} from "element-plus";
@@ -47,6 +52,19 @@ export async function getMeteoDataListByDate(apiObj){
     }
 }
 
+export async function getMeteoDataListByComplex(apiObj){
+    const res = await getMeteoDataByComplex(apiObj)
+    if (res.data.success === 1){
+        return {
+            list:res.data.data,
+            total:res.data.total
+        }
+    }else {
+        ElMessage.warning("当前复合条件下未查询到气象数据")
+        return []
+    }
+}
+
 const getTableData = (formData,meteoDataList,total,tableHeader,tableData,loadingTable) => {
     tableHeader.value = extractLabels(formData.selectMeteoElements,config.container.query.form.meteo_elements)
     tableData.value = meteoDataList.value
@@ -91,4 +109,28 @@ export async function getMeteoDataQueryTableByDate(formData,meteoDataList,total,
     meteoDataList.value = obj.list
     total.value = obj.total
     getTableData(formData,meteoDataList,total,tableHeader,tableData,loadingTable,obj)
+}
+
+export async function getMeteoDataQueryTableByComplex(formData,editObj,meteoDataList,total,tableHeader,tableData,loadingTable){
+    let oldApiObj = {
+        station:formData.selectStation,
+        start_date:formData.date,
+        end_date:formData.end_date,
+        pageSize:10,
+        offset:formData.offset
+    }
+    let apiObj = {...oldApiObj,...editObj}
+    let obj = await getMeteoDataListByComplex(apiObj)
+    meteoDataList.value = obj.list
+    total.value = obj.total
+    getTableData(formData,meteoDataList,total,tableHeader,tableData,loadingTable,obj)
+}
+
+export async function getMeteoModelInfoData(){
+    const res = await getMeteoModelInfo()
+    if (res.data.code === 200){
+        return res.data.data
+    }else {
+        return {}
+    }
 }

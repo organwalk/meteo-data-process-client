@@ -16,11 +16,11 @@
           </el-col>
       </el-row>
       <el-row :gutter="15">
-          <container-server-card :card-data="{title:config.container.server.card.station_name,content:serverData.stationName}"/>
-          <container-server-card :card-data="{title:config.container.server.card.start_date,content:serverData.startDate}"/>
-          <container-server-card :card-data="{title:config.container.server.card.running_status,content:'正常'}"/>
+          <server-card :card-data="{title:config.container.server.card.station_name,content:serverData.stationName}"/>
+          <server-card :card-data="{title:config.container.server.card.start_date,content:serverData.startDate}"/>
+          <server-card :card-data="{title:config.container.server.card.running_status,content:'正常'}"/>
       </el-row><br/>
-      <container-server-collection/>
+      <server-collection/>
   </el-card>
 </template>
 
@@ -28,10 +28,10 @@
 import config from "@/config/main-page-config.json"
 import {useStore} from "vuex";
 import {computed, reactive, watchEffect} from "vue";
-import ContainerServerCard from "@/components/body/main-pages/container/container-server-card.vue";
+import ServerCard from "@/components/body/main-pages/container/server/server-card.vue";
 import {getStartDate} from "@/service/station-service";
 import {ElMessage} from "element-plus";
-import ContainerServerCollection from "@/components/body/main-pages/container/container-server-collection.vue";
+import ServerCollection from "@/components/body/main-pages/container/server/server-collection.vue";
 
 const store = useStore()
 const serverData = reactive({

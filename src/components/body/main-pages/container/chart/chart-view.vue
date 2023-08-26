@@ -15,7 +15,7 @@
                 </el-select>
             </el-col>
         </el-row>
-        <div id="aDayMeteoChart" ref="aDayMeteoChart" style="width: 100%; height: 45vh"></div>
+        <div id="aDayMeteoChart" style="width: 100%; height: 45vh"></div>
     </el-card>
 </template>
 

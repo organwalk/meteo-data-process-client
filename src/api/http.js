@@ -1,4 +1,5 @@
 import request from '@/api/request'
+import prequest from "@/api/prequest";
 
 const http = {
     post(url, params){
@@ -44,6 +45,14 @@ const http = {
         }
         if (params) config.params = params
         return request(config)
+    },
+    p_get(url,params){
+        const config = {
+            method:'get',
+            url:url,
+        }
+        if (params) config.params = params
+        return prequest(config)
     },
 }
 export default http

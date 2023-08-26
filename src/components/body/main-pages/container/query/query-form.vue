@@ -9,7 +9,7 @@
                     </template>
                     <br/>
                     <el-form :model="formData" label-width="100px">
-                        <el-form-item label="选择气象站点">
+                        <el-form-item :label="config.container.query.form.label.station">
                             <el-select v-model="formData.selectStation" >
                                 <el-option
                                     v-for="item in formData.storeStationList"
@@ -19,8 +19,8 @@
                                 />
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="选择气象要素">
-                            <el-select v-model="formData.selectMeteoElements" multiple style="width: 30vw" @remove-tag="checkMeteoElements">
+                        <el-form-item :label="config.container.query.form.label.meteo_elements">
+                            <el-select v-model="formData.selectMeteoElements" multiple style="width: 30vw" @remove-tag="checkMeteoElements" placeholder="必须选择一个气象要素">
                                 <el-option
                                     v-for="item in config.container.query.form.meteo_elements"
                                     :key="item.value"
@@ -29,7 +29,7 @@
                                 />
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="选择时间要素">
+                        <el-form-item :label="config.container.query.form.label.time_elements">
                             <el-row :gutter="25">
                                 <el-col :xs="11" :sm="11" :md="11" :lg="11" :xl="11">
                                     <el-date-picker
@@ -60,8 +60,8 @@
                                 </el-col>
                             </el-row>
                         </el-form-item>
-                        <el-form-item label="填写复合条件">
-                            <el-button @click="edit()" v-buttonAutoLoseFocus>点击此处进行填写</el-button>
+                        <el-form-item :label="config.container.query.form.label.condition" v-if="formData.queryType === 'Query by condition'">
+                            <el-button @click="edit()" :color="editTipButtonColor" v-buttonAutoLoseFocus plain>{{editTip}}</el-button>
                         </el-form-item>
                         <el-form-item>
                             <el-button style="width: 10vw" type="primary" @click="query()" v-buttonAutoLoseFocus>查询</el-button>
@@ -79,29 +79,29 @@
         style="border-radius: 10px;padding-left: 20px;padding-right: 20px;padding-top: 20px"
         :show-close="false"
     >
-        <el-row :gutter="15">
+        <el-row :gutter="15" >
             <el-form :model="editData" v-for="item in editData.List" :key="item">
                 <el-form-item :label="item.label + '范围'">
                     <el-row>
                         <el-col :xs="11" :sm="11" :md="11" :lg="11" :xl="11">
-                            <el-input-number :model-value="getEditModel(item, 'start')" :min="1" :max="10" @change="handleChange(item,'start')" size="small" />
+                            <el-input-number :controls="false" v-model="editData.editInputStartValue[editData.editInputStartMap[item.value]]" size="small" />
                         </el-col>
                         <el-col :xs="2" :sm="2" :md="2" :lg="2" :xl="2" align="center">
                             <span>&nbsp;~</span>
                         </el-col>
                         <el-col :xs="11" :sm="11" :md="11" :lg="11" :xl="11">
-                            <el-input-number :model-value="getEditModel(item, 'end')" :min="1" :max="10" @change="handleChange(item,'end')" size="small" />
+                            <el-input-number :controls="false" v-model="editData.editInputEndValue[editData.editInputEndMap[item.value]]" size="small" />
                         </el-col>
                     </el-row>
                 </el-form-item>
             </el-form>
         </el-row>
         <template #footer>
-            <el-button @click="editVisible = false">取消</el-button>
-            <el-button type="primary" @click="confirm()">确认</el-button>
+            <el-button @click="cancelEdit()" >取消</el-button>
+            <el-button type="primary" @click="confirmThisEdit()">确认</el-button>
         </template>
     </el-dialog>
-    <container-query-form-table
+    <query-form-table
         :table-data="tableData"
         :table-header="tableHeader"
         :loading-table="loadingTable"
@@ -114,14 +114,15 @@
 import {computed, reactive, ref, watch, watchEffect} from "vue";
 import config from "@/config/main-page-config.json"
 import {useStore} from "vuex";
-import {checkMeteoElementsNotNull, getDisabledDate, getGMTTimeToStrISO8601} from "@/utils/utils";
+import {checkMeteoElementsNotNull, getDisabledDate, getGMTTimeToStrISO8601, notEmptyValues} from "@/utils/utils";
 import {getStationValidDatesList} from "@/service/station-service";
 import {
+    getMeteoDataQueryTableByComplex,
     getMeteoDataQueryTableByDate,
     getMeteoDataQueryTableByDay,
     getMeteoDataQueryTableByHour
 } from "@/service/meteo-data-service";
-import ContainerQueryFormTable from "@/components/body/main-pages/container/container-query-form-table.vue";
+import QueryFormTable from "@/components/body/main-pages/container/query/query-form-table.vue";
 import {ElMessage} from "element-plus";
 
 const store = useStore()
@@ -145,34 +146,33 @@ const isQuery = ref(false)
 const loadingForm = ref(true)
 const loadingTable = ref(false)
 const editVisible = ref(false)
+const editTip = ref('点击此处填写')
+const editTipButtonColor = ref('#909399')
 const editData = reactive({
     List:[],
-    dataMap: {
-        1: { start: 'start_temperature', end: 'end_temperature' },
-        2: { start: 'start_humidity', end: 'end_humidity' },
-        3: { start: 'start_speed', end: 'end_speed' },
-        4: { start: 'start_direction', end: 'end_direction' },
-        5: { start: 'start_rain', end: 'end_rain' },
-        6: { start: 'start_sunlight', end: 'end_sunlight' },
-        7: { start: 'start_pm25', end: 'end_pm25' },
-        8: { start: 'start_pm10', end: 'end_pm10' },
+    editInputStartValue:[],
+    editInputStartMap:{
+        1:'start_temperature',
+        2:'start_humidity',
+        3:'start_speed',
+        4:'start_direction',
+        5:'start_rain',
+        6:'start_sunlight',
+        7:'start_pm25',
+        8:'start_pm10',
     },
-    start_temperature:0,
-    end_temperature:0,
-    start_humidity:0,
-    end_humidity:0,
-    start_speed:0,
-    end_speed:0,
-    start_direction:0,
-    end_direction:0,
-    start_rain:0,
-    end_rain:0,
-    start_sunlight:0,
-    end_sunlight:0,
-    start_pm25:0,
-    end_pm25:0,
-    start_pm10:0,
-    end_pm10:0
+    editInputEndValue:[],
+    editInputEndMap:{
+        1:'end_temperature',
+        2:'end_humidity',
+        3:'end_speed',
+        4:'end_direction',
+        5:'end_rain',
+        6:'end_sunlight',
+        7:'end_pm25',
+        8:'end_pm10',
+    },
+    editObj:{}
 })
 
 watchEffect(async ()=>{
@@ -198,42 +198,45 @@ const setDateAndEndDate = () => {
     }
 }
 
+const previousMeteoElements = ref([])
 const edit = () => {
     editVisible.value = true
-    formData.selectMeteoElements.forEach((item) => {
-        config.container.query.form.meteo_elements.find((element)=>{
-            if (element.value === item){
+    const currentMeteoElements = formData.selectMeteoElements
+    if (JSON.stringify(currentMeteoElements) === JSON.stringify(previousMeteoElements)) {
+        return
+    }
+    editData.List = []
+    currentMeteoElements.forEach((item) => {
+        config.container.query.form.meteo_elements.find((element) => {
+            if (element.value === item) {
                 editData.List.push(element)
             }
         })
     })
+    previousMeteoElements.value = currentMeteoElements
 }
 
-const getEditModel = (item, type)=> {
-    const map = editData.dataMap[item.value];
-    if (map) {
-        return editData[map[type]]
+const cancelEdit = () => {
+    editVisible.value = false
+    editData.editObj = {...editData.editInputStartValue, ...editData.editInputEndValue}
+    if (Object.keys(editData.editObj).length !== formData.selectMeteoElements.length * 2 || !notEmptyValues(editData.editObj)){
+        editTipButtonColor.value = '#F56C6C'
+        editTip.value = '存在空值'
     }
 }
-const confirm = () => {
-    const obj = ref({}); // 使用ref创建响应式对象
-    editData.List.forEach(item => {
-        const map = editData.dataMap[item.value];
-        if (map) {
-            // 在赋值时使用obj.value
-            console.log(editData[map.start])
-            obj.value[map.start] = editData[map.start];
-            obj.value[map.end] = editData[map.end];
-        }
-    });
-    console.log(obj.value);
-};
-const handleChange = (item, type , val)=> {
-    const map = editData.dataMap[item.value];
-    if (map) {
-        editData[map[type]] = val;
+
+const confirmThisEdit = () => {
+    console.log(editData.editObj)
+    editData.editObj = {...editData.editInputStartValue, ...editData.editInputEndValue}
+    if (Object.keys(editData.editObj).length !== formData.selectMeteoElements.length * 2 || !notEmptyValues(editData.editObj)){
+        ElMessage.warning("请填写完整数据范围")
+    }else {
+        editVisible.value = false
+        editTipButtonColor.value = '#67C23A'
+        editTip.value = '填写完成'
     }
 }
+
 
 const checkMeteoElements = (val) => {
     if (formData.selectMeteoElements.length === 0){
@@ -272,10 +275,18 @@ const getPageNumber = async (pageNumber) => {
 }
 
 const query = async () => {
-    isQuery.value = true
-    loadingTable.value = true
-    meteoDataList.value = []
-    await queryByType()
+    if (formData.queryType === 'Query by condition' && (Object.keys(editData.editObj).length !== formData.selectMeteoElements.length * 2 || !notEmptyValues(editData.editObj))){
+        ElMessage.warning("请填写完整复合条件")
+    }else {
+        if (formData.selectMeteoElements.length === 0){
+            formData.selectMeteoElements = checkMeteoElementsNotNull('1')
+        }else {
+            isQuery.value = true
+            loadingTable.value = true
+            meteoDataList.value = []
+            await queryByType()
+        }
+    }
 }
 
 const queryByType = async () => {
@@ -288,6 +299,10 @@ const queryByType = async () => {
             break
         case 'Query by date':
             await getMeteoDataQueryTableByDate(formData,meteoDataList,total,tableHeader,tableData,loadingTable)
+            break
+        case 'Query by condition':
+            await getMeteoDataQueryTableByComplex(formData,editData.editObj,meteoDataList,total,tableHeader,tableData,loadingTable)
+            break
     }
 }
 

@@ -18,3 +18,13 @@ export function getMeteoDataByDate(apiObj){
         buildQueryURL('/qx/stat_day_range', apiObj)
     )
 }
+
+export function getMeteoDataByComplex(apiObj){
+    return http.query_auth_post(
+        buildQueryURL('/qx/query', apiObj)
+    )
+}
+
+export function getMeteoModelInfo(){
+    return http.p_get('/qx/model/info')
+}

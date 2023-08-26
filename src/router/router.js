@@ -8,6 +8,11 @@ const routes = [
         path : '/',
         name : 'main',
         component: ()=>import('@/pages/MainPage.vue')
+    },
+    {
+        path : '/modelPrediction',
+        name : 'modelPrediction',
+        component: ()=>import('@/pages/ModelPredictionPage.vue')
     }
 ]
 

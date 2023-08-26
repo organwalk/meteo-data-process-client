@@ -78,3 +78,10 @@ export function getPageData(tableData,total){
         count:String(Math.round(total.value/10))
     }
 }
+
+export function notEmptyValues(obj) {
+    return Object.keys(obj).every(key => {
+        const value = obj[key];
+        return value !== null && value !== undefined && value !== '';
+    });
+}

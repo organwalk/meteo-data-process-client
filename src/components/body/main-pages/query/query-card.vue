@@ -53,7 +53,7 @@ watchEffect(()=>{
     margin-bottom: 20px;
     background-color: #409EFF;
     color: #ffffff;
-    height: 30vh;
+    height: 27vh;
 }
 #click-query-tab span{
     font-size: 15px;

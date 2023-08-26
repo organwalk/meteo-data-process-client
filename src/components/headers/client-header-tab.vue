@@ -5,6 +5,7 @@
                    :key="tab.text"
                    @click="pushRouter(tab.route)"
                    text
+                   :style="getButtonBackGroundColor(tab.route)"
                    v-buttonAutoLoseFocus>
             <h3>{{ tab.text }}</h3>
         </el-button>
@@ -26,6 +27,11 @@ const showSignOut = ref(false)
 watchEffect(()=>{
     showSignOut.value = !!sessionStorage.getItem("auth");
 })
+const getButtonBackGroundColor = (route) => {
+    if (window.location.pathname === route){
+        return {backgroundColor:'#f4f4f5'}
+    }
+}
 </script>
 
 <style scoped>
