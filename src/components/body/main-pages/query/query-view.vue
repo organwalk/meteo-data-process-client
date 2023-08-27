@@ -8,11 +8,11 @@
 
 <script setup>
 import QueryCard from "@/components/body/main-pages/query/query-card.vue";
+
 </script>
 
 <style scoped>
 #query{
-    height: 90vh;
     border-radius: 0;
     border-left: none;
     overflow-y: auto;

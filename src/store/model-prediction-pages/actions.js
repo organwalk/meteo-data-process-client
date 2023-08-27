@@ -7,5 +7,8 @@ export default {
     },
     updateReport({commit},report){
         commit('setReport',report)
+    },
+    updatePredictionList({commit},predictionList){
+        commit('setPredictionList',predictionList)
     }
 }

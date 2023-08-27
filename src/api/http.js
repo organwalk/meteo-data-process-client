@@ -54,5 +54,17 @@ const http = {
         if (params) config.params = params
         return prequest(config)
     },
+    p_post(url, params){
+        const config = {
+            url:url,
+            method: 'post',
+            data: params,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        if (params) config.data = params
+        return prequest(config)
+    },
 }
 export default http

@@ -23,11 +23,12 @@ const queryStore = computed(()=>store.state.mainPages.queryType)
 
 <style scoped>
 #container{
-    height: 90vh;
+
     border-radius: 0;
     border-right: none;
+    border-left: none;
     overflow-y: auto;
-    background-color: #f6f8fa;
+    border-bottom: none;
 }
 ::-webkit-scrollbar {
     display: none;

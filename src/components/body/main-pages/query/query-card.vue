@@ -10,7 +10,7 @@
 
 <script setup>
 import config from "@/config/main-page-config.json";
-import {ref, watchEffect} from "vue";
+import { ref, watchEffect} from "vue";
 import {useStore} from "vuex";
 
 const store = useStore()
@@ -18,6 +18,7 @@ const type = ref(null)
 
 const toQuery = async (val) => {
     await store.dispatch('updateQueryType',val)
+
 }
 watchEffect(()=>{
     type.value = store.state.mainPages.queryType
@@ -26,7 +27,7 @@ watchEffect(()=>{
 
 <style scoped>
 #query-card{
-    border-radius: 15px;
+    border-radius: 10px;
     margin-bottom: 20px;
     color: #333333;
     height: 27vh;
@@ -49,7 +50,7 @@ watchEffect(()=>{
     line-height: 1.5rem;
 }
 #click-query-tab{
-    border-radius: 15px;
+    border-radius: 10px;
     margin-bottom: 20px;
     background-color: #409EFF;
     color: #ffffff;

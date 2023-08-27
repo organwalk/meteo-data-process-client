@@ -66,7 +66,7 @@ const getContainerChart = async () => {
 <style scoped>
 #container-chart{
     height: 55vh;
-    border-radius: 15px;
+    border-radius: 10px;
     user-select: none;
     font-family: 微软雅黑,system-ui;
 }

@@ -11,7 +11,7 @@
         </el-button>
         <el-button v-if="showSignOut" class="tab-el-button"
                    @click="signOutSystem()"
-                   v-html="config.tab.sign_out" plain round />
+                   v-html="config.tab.sign_out" text />
     </el-col>
 </template>
 

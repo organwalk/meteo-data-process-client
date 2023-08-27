@@ -1,5 +1,6 @@
 export default {
     modelList:[],
     paddingZero:true,
-    report:true
+    report:true,
+    predictionList:[]
 }

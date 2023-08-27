@@ -21,6 +21,8 @@ export function getAnimationDelay(index){
     return `${index * delay}s`;
 }
 
+
+
 export function checkOnlyEngAndNumber(str){
     if (/^[a-zA-Z0-9]+$/.test(str)){
         return true
@@ -61,12 +63,10 @@ export function convertToObjectArrayFrom2DArray(Array2D, labelArray) {
     let objectsArray = [];
     Array2D.forEach(function(data) {
         let object = {};
-
         data.forEach(function(value, index) {
             let label = labelArray[index];
             object[label] = value;
         });
-
         objectsArray.push(object);
     });
     return objectsArray;

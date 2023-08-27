@@ -2,7 +2,7 @@ import {
     getMeteoDataByComplex,
     getMeteoDataByDate,
     getMeteoDataByDay,
-    getMeteoDataByHour, getMeteoModelInfo
+    getMeteoDataByHour, getMeteoModelInfo, getMeteoModelPrediction
 } from "@/api/meteo-data/api-meteo-data";
 import {extractLabels} from "@/utils/utils";
 import config from "@/config/main-page-config.json";
@@ -132,5 +132,39 @@ export async function getMeteoModelInfoData(){
         return res.data.data
     }else {
         return {}
+    }
+}
+
+export async function getMeteoModelPredictData(apiObj){
+    const res = await getMeteoModelPrediction(apiObj)
+    if (res.data.code === 200){
+        return res.data.data
+    }else {
+        return {}
+    }
+}
+
+export async function getMeteoModelPredictionApiObj(configForm,planType){
+    let baseObj = {
+        station:configForm.station,
+        start_date:configForm.date,
+    }
+    console.log(planType.value)
+    if (planType.value ==='24小时预测'){
+        return  {
+            ...baseObj,
+            ...{
+                end_date:configForm.date,
+                model_type:'ShortTermByLSTM'
+            }
+        }
+    }else {
+        return  {
+            ...baseObj,
+            ...{
+                end_date:configForm.end_date,
+                model_type:'LongTermWithinAWeekByLSTM'
+            }
+        }
     }
 }

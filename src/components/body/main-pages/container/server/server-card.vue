@@ -19,7 +19,7 @@ const props = defineProps({
 
 <style scoped>
 #server-card {
-    border-radius: 15px;
+    border-radius: 10px;
     font-family: 微软雅黑,serif;
     user-select: none;
     margin-top: 4vh;

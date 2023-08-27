@@ -28,3 +28,7 @@ export function getMeteoDataByComplex(apiObj){
 export function getMeteoModelInfo(){
     return http.p_get('/qx/model/info')
 }
+
+export function getMeteoModelPrediction(apiObj){
+    return http.p_post('/qx/model/predict',apiObj)
+}

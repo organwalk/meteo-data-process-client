@@ -46,7 +46,6 @@ const page = reactive({
 })
 const useTableData = ref([])
 watchEffect(()=>{
-    console.log(tableData.value + "11111")
     if (tableData.value !== undefined){
         useTableData.value = convertToObjectArrayFrom2DArray(tableData.value,tableHeader.value)
         page.size = getPageData(tableData,total).size
@@ -61,7 +60,7 @@ watchEffect(()=>{
 
 <style scoped>
 #form-table{
-    border-radius: 15px;
+    border-radius: 10px;
     font-family: 微软雅黑,serif;
     user-select: none;
 }

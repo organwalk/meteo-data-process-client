@@ -7,5 +7,8 @@ export default{
     },
     setReport(state,report){
         state.report = report
+    },
+    setPredictionList(state,prediction){
+        state.predictionList = prediction
     }
 }

@@ -310,7 +310,7 @@ const queryByType = async () => {
 
 <style scoped>
 #query-form{
-    border-radius: 10px;
+    border-radius: 5px;
     font-family: 微软雅黑,serif;
     user-select: none;
 }

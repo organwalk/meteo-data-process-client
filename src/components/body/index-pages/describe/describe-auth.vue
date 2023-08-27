@@ -10,7 +10,7 @@
             destroy-on-close
     >
         <el-row>
-            <el-card shadow="never" style="border-radius: 15px;margin-top: 0;" align="center" v-loading="authLoading">
+            <el-card shadow="never" style="border-radius: 10px;margin-top: 0;" align="center" v-loading="authLoading">
                 <describe-auth-des/>
                 <describe-auth-service/>
             </el-card>

@@ -1,5 +1,5 @@
 <template>
-    <el-row style="height: 90vh">
+    <el-row >
         <el-col :xs="8" :sm="6" :md="4" :lg="24" :xl="1" >
             <el-row >
                 <query-view/>

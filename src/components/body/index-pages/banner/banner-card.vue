@@ -11,7 +11,7 @@
                 <span v-html="card.des"/>
             </el-col>
             <el-col :xs="8" :sm="6" :md="4" :lg="6" :xl="1" >
-                <el-card style="border: none;width: 15vw;border-radius: 30px" shadow="never">
+                <el-card style="border: none;width: 15vw;border-radius: 5px" shadow="never">
                     <img :src=getImagePath(card.img) alt="404"/>
                 </el-card>
             </el-col>
@@ -27,7 +27,7 @@ import {getImagePath, getAnimationDelay} from "@/utils/utils"
 
 <style scoped>
 .banner-card{
-    border-radius: 15px;
+    border-radius: 10px;
     height: 20vh;
     padding-left: 20px;
     padding-right: 50px;

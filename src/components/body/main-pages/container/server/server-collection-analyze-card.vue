@@ -13,7 +13,7 @@ import config from "@/config/main-page-config.json"
 
 <style scoped>
 #collection-analyze-card{
-    border-radius: 15px;
+    border-radius: 10px;
     user-select: none;
     font-family: 微软雅黑,serif;
     height: 45vh;

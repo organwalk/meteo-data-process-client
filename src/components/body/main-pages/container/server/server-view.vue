@@ -61,10 +61,10 @@ watchEffect(async () => {
 
 <style scoped>
 #container-server{
-    border-radius: 15px;
+    border-radius: 10px;
     user-select: none;
     font-family: 微软雅黑,serif;
-    height: 95vh;
+
 }
 #container-server span{
     font-weight: bolder;
