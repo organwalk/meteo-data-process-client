@@ -9,12 +9,12 @@ const router =createRouter({
 
 router.beforeEach((to, from, next) => {
     if (!sessionStorage.getItem("auth")) {
-        if (to.name !== "main"){
+        if (to.name === "index"){
             next()
         }else {
             ElMessage.warning("您尚未登录")
             setTimeout(()=>{
-                window.location.href = "/index"
+                window.location.href = "/"
             },1000)
         }
     } else {

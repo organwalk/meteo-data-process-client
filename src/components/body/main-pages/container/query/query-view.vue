@@ -16,7 +16,7 @@ import QueryForm from "@/components/body/main-pages/container/query/query-form.v
 <style scoped>
 #container-query{
     border-radius: 10px;
-    height: 100vh;
+    height: 852px;
     overflow-y: auto;
 }
 

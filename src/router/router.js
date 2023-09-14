@@ -1,13 +1,18 @@
 const routes = [
     {
-        path : '/index',
+        path : '/',
         name : 'index',
         component: () => import('@/pages/IndexPage.vue')
     },
     {
-        path : '/',
+        path : '/main',
         name : 'main',
         component: ()=>import('@/pages/MainPage.vue')
+    },
+    {
+        path: '/dataAnalyze',
+        name: 'dataAnalyze',
+        component:()=>import('@/pages/DataAnalyzePage.vue')
     },
     {
         path : '/modelPrediction',

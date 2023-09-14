@@ -1,4 +1,5 @@
 import {
+    getMeteoCorrelation,
     getMeteoDataByComplex,
     getMeteoDataByDate,
     getMeteoDataByDay,
@@ -9,7 +10,7 @@ import config from "@/config/main-page-config.json";
 import {ElMessage} from "element-plus";
 
 export async function getMeteoByDayAboutStatusAndDataList(station, selectMeteoElement){
-    const res = await getMeteoDataByDay(station.station, '2023-06-27', selectMeteoElement.value, '2')
+    const res = await getMeteoDataByDay(station.station, '2023-07-27', selectMeteoElement.value, '2')
     return {
         status:res.data.success,
         dataList:res.data.data
@@ -149,7 +150,6 @@ export async function getMeteoModelPredictionApiObj(configForm,planType){
         station:configForm.station,
         start_date:configForm.date,
     }
-    console.log(planType.value)
     if (planType.value ==='24小时预测'){
         return  {
             ...baseObj,
@@ -166,5 +166,20 @@ export async function getMeteoModelPredictionApiObj(configForm,planType){
                 model_type:'LongTermWithinAWeekByLSTM'
             }
         }
+    }
+}
+
+export async function getMeteoCorrelationDataList(analyzeForm){
+    let apiObj = {
+        'station':analyzeForm.station,
+        'start_date':analyzeForm.date,
+        'end_date':analyzeForm.end_date,
+        'correlation':analyzeForm.selectMeteoElements
+    }
+    const res = await getMeteoCorrelation(apiObj)
+    if (res.data.code === 200){
+        return res.data.data
+    }else {
+        return []
     }
 }

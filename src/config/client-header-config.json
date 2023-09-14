@@ -6,7 +6,7 @@
     "button": [
       {
         "text": "首页",
-        "route": "/"
+        "route": "/main"
       },
       {
         "text": "数据分析",

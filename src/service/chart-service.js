@@ -40,46 +40,48 @@ export function getADayMeteoChart(meteoDataList) {
 }
 
 
-export function getCorrelationChart(){
-    const data = [
-        [1.0, 0.5498798620562756, 0.0, 0.0, 0.0, 0.17878187525561642, -0.4308857498487388, 0.0],
-        [0.5498798620562756, 1.0, 0.0, 0.0, 0.0, -0.009081106636836544, -0.5560802062070341, 0.0],
-        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-        [0.17878187525561645, -0.009081106636836542, 0.0, 0.0, 0.0, 1.0, 0.15402435840569395, 0.0],
-        [-0.4308857498487388, -0.5560802062070342, 0.0, 0.0, 0.0, 0.15402435840569395, 1.0, 0.0],
-        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    ];
-
-    const labels = ['Temperature', 'Humidity', 'Speed', 'Direction', 'Rain', 'Sunlight', 'PM2.5', 'PM10'];
-
+export function getCorrelationChart() {
+    const myChart = echarts.init(document.getElementById('correlationChart'));
+    const data = [[1.0, 0.55, 0.0, 0.0, 0.0, 0.18, -0.43, 0.0], [0.55, 1.0, 0.0, 0.0, 0.0, -0.01, -0.56, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.18, -0.01, 0.0, 0.0, 0.0, 1.0, 0.15, 0.0], [-0.43, -0.56, 0.0, 0.0, 0.0, 0.15, 1.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
+    const labels = ['温度', '湿度', '风速', '风向', '降雨', '光照', 'PM25', 'PM10'];
     const seriesData = [];
-
     for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data[i].length; j++) {
             seriesData.push({
                 name: labels[i] + ' - ' + labels[j],
-                value: data[i][j]
+                value: [i, j, data[i][j]]
             });
         }
     }
-
-    const option = {
+    myChart.setOption({
+        xAxis: {
+            type: 'category',
+            data: labels
+        },
+        yAxis: {
+            type: 'category',
+            data: labels
+        },
+        visualMap: {
+            min: -1,
+            max: 1,
+            calculable: true,
+            orient: 'vertical',
+            left: 'right',
+            top: 'center'
+        },
         series: [{
-            type: 'treemap',
+            type: 'heatmap',
             data: seriesData,
-            leafDepth: 1, // 设置叶子节点的层级为1
             label: {
-                show: true,
-                formatter: '{b}: {c}' // 显示标签，格式为"名称: 值"
+                show: true
             },
             emphasis: {
-                label: {
-                    show: true
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
                 }
             }
         }]
-    };
-    console.log(option)
+    });
 }

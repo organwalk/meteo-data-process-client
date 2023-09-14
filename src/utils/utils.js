@@ -40,8 +40,18 @@ export function getGMTTimeToStrISO8601(date){
     return date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
 }
 
-export function checkMeteoElementsNotNull(val){
-    ElMessage.warning("必须选择一个气象要素")
+export function checkMeteoElementsNotNull(val,number){
+    const chineseNumerals = {
+        1: '一',
+        2: '两',
+        3: '三',
+        4: '四',
+        5: '五',
+        6: '六',
+        7: '七',
+        8: '八'
+    }
+    ElMessage.warning("必须选择"+chineseNumerals[number]+"个气象要素")
     return [val]
 }
 

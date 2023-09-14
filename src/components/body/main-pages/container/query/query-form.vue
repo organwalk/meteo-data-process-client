@@ -240,7 +240,7 @@ const confirmThisEdit = () => {
 
 const checkMeteoElements = (val) => {
     if (formData.selectMeteoElements.length === 0){
-        formData.selectMeteoElements = checkMeteoElementsNotNull(val)
+        formData.selectMeteoElements = checkMeteoElementsNotNull(val,1)
     }
 }
 const disabledDate = (date) => {
@@ -279,7 +279,7 @@ const query = async () => {
         ElMessage.warning("请填写完整复合条件")
     }else {
         if (formData.selectMeteoElements.length === 0){
-            formData.selectMeteoElements = checkMeteoElementsNotNull('1')
+            formData.selectMeteoElements = checkMeteoElementsNotNull('1',1)
         }else {
             isQuery.value = true
             loadingTable.value = true

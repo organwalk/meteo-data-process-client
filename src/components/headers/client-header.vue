@@ -26,7 +26,7 @@ import ClientHeaderTab from "@/components/headers/client-header-tab.vue";
 import {ref} from "vue";
 
 const showLine = ref(true)
-if (window.location.pathname !== "/index") {
+if (window.location.pathname !== "/") {
     showLine.value = false
 }
 </script>

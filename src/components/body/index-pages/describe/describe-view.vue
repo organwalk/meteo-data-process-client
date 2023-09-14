@@ -29,7 +29,7 @@ import {useStore} from "vuex";
 const store = useStore()
 const startNow = () => {
     if (sessionStorage.getItem("auth")){
-        window.location.href = "/"
+        window.location.href = "/main"
     }else {
         store.dispatch('updateKeepAuthViewOpen', {type:'login',status:true})
     }

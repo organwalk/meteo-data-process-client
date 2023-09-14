@@ -10,7 +10,7 @@ export async function loginToSystem(authServiceData) {
             sessionStorage.setItem('auth', JSON.stringify(res.data.auth))
             setTimeout(()=>{
                 authServiceData.isLogin = false
-                window.location.href = "/"
+                window.location.href = "/main"
             },1000)
             ElMessage.success("登录成功")
         }else {
@@ -37,7 +37,7 @@ export async function signOutSystem(){
     if (res.data.success === 1){
         sessionStorage.setItem("auth","")
         ElMessage.success("已退出登录")
-        window.location.href = "/index"
+        window.location.href = "/"
     }else {
         ElMessage.error("内部服务错误，请重试")
     }

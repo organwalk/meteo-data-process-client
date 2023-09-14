@@ -7,7 +7,7 @@
 <script setup>
 import config from "@/config/client-header-config.json"
 const nextToIndex = () => {
-    window.location.href = "/index"
+    window.location.href = "/"
 }
 </script>
 

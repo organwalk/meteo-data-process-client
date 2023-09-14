@@ -1,7 +1,7 @@
 <template>
   <el-card id="model-result-view" shadow="never">
       <div v-if="useTableData.length !== 0">
-          <el-table :data="useTableData" border style="width: 100%;" >
+          <el-table :data="useTableData" border style="width: 100%;" height="700">
               <el-table-column v-for="(name, index) in tableHeader" :key="index" :prop="name" :label="name"
                                align="center"/>
           </el-table>
@@ -31,7 +31,6 @@ watch(()=>store.state.modelPredictionPages.predictionList,(newVal)=>{
 
 <style scoped>
 #model-result-view{
-
     font-family: 微软雅黑,serif;
     color: #333333;
     user-select: none;

@@ -107,7 +107,7 @@ watchEffect(async ()=>{
     if (stationList.value.length !== 0) {
         configForm.station = stationList.value[0].station
     }
-    validDates.value = await getStationValidDatesList(configForm.station)
+    validDates.value = (await getStationValidDatesList(configForm.station)).splice(0,9)
     loading.value = false
     setDateAndEndDate()
 })
