@@ -4,20 +4,18 @@
 
 <script setup>
 import {getCorrelationChart} from "@/service/chart-service";
-import {computed, defineProps, onMounted, watchEffect} from "vue";
+import {computed, defineProps, watchEffect} from "vue";
 
 const props = defineProps({
     elements:Array,
     correlationList:Array
 })
 const elements = computed(()=>props.elements)
-onMounted(()=>{
-    getCorrelationChart()
-})
+const correlationList = computed(()=> props.correlationList)
+
 watchEffect(()=>{
-    if (elements.value.length !==0){
-        console.log(elements.value)
-        getCorrelationChart()
+    if (elements.value.length !==0 && correlationList.value.length !== 0){
+        getCorrelationChart(correlationList.value, elements.value)
     }
 })
 </script>

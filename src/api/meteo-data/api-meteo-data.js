@@ -26,13 +26,13 @@ export function getMeteoDataByComplex(apiObj){
 }
 
 export function getMeteoModelInfo(){
-    return http.p_get('/qx/model/info')
+    return http.get('/anapredict/model/info')
 }
 
 export function getMeteoModelPrediction(apiObj){
-    return http.p_post('/qx/model/predict',apiObj)
+    return http.json_auth_post('/anapredict/model/prediction',apiObj)
 }
 
 export function getMeteoCorrelation(apiObj){
-    return http.p_post('/qx/correlation', apiObj)
+    return http.json_auth_post('/anapredict/analyze/correlation', apiObj)
 }

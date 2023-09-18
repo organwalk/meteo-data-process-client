@@ -1,5 +1,4 @@
 import request from '@/api/request'
-import prequest from "@/api/prequest";
 
 const http = {
     post(url, params){
@@ -34,6 +33,20 @@ const http = {
         if (params) config.params = params
         return request(config)
     },
+    json_auth_post(url, params){
+        const config = {
+            url:url,
+            method: 'post',
+            data: params,
+            headers: {
+                'Content-Type': 'application/json',
+                'name':JSON.parse(sessionStorage.getItem("auth")).name,
+                'access_token':JSON.parse(sessionStorage.getItem("auth")).access_token
+            }
+        }
+        if (params) config.data = params
+        return request(config)
+    },
     get(url,params){
         const config = {
             method:'get',
@@ -45,26 +58,6 @@ const http = {
         }
         if (params) config.params = params
         return request(config)
-    },
-    p_get(url,params){
-        const config = {
-            method:'get',
-            url:url,
-        }
-        if (params) config.params = params
-        return prequest(config)
-    },
-    p_post(url, params){
-        const config = {
-            url:url,
-            method: 'post',
-            data: params,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }
-        if (params) config.data = params
-        return prequest(config)
     },
 }
 export default http

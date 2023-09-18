@@ -155,7 +155,7 @@ export async function getMeteoModelPredictionApiObj(configForm,planType){
             ...baseObj,
             ...{
                 end_date:configForm.date,
-                model_type:'ShortTermByLSTM'
+                model_type:'SHORTTERM_LSTM'
             }
         }
     }else {
@@ -163,7 +163,7 @@ export async function getMeteoModelPredictionApiObj(configForm,planType){
             ...baseObj,
             ...{
                 end_date:configForm.end_date,
-                model_type:'LongTermWithinAWeekByLSTM'
+                model_type:'LONGTERM_LSTM'
             }
         }
     }
@@ -174,7 +174,7 @@ export async function getMeteoCorrelationDataList(analyzeForm){
         'station':analyzeForm.station,
         'start_date':analyzeForm.date,
         'end_date':analyzeForm.end_date,
-        'correlation':analyzeForm.selectMeteoElements
+        'correlation':analyzeForm.selectMeteoElements.join(",")
     }
     const res = await getMeteoCorrelation(apiObj)
     if (res.data.code === 200){

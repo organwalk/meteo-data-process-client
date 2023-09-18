@@ -85,6 +85,7 @@ import {onMounted, reactive, ref, watchEffect} from "vue";
 import {getStationData, getStationValidDatesList} from "@/service/station-service";
 import {checkMeteoElementsNotNull, getDisabledDate, getGMTTimeToStrISO8601} from "@/utils/utils";
 import {ElMessage} from "element-plus";
+import {getMeteoCorrelationDataList} from "@/service/meteo-data-service";
 // import {getMeteoCorrelationDataList} from "@/service/meteo-data-service";
 
 
@@ -111,12 +112,13 @@ watchEffect(async ()=>{
     validDates.value = await getStationValidDatesList(analyzeForm.station)
     loading.value = false
     setDateAndEndDate()
+    await startAnalyze()
 })
 const startAnalyze = async () => {
-    // const list = await getMeteoCorrelationDataList(analyzeForm)
-    // if (list.length > 0){
-    //     chartDataList.value = list
-    // }
+    const list = await getMeteoCorrelationDataList(analyzeForm)
+    if (list.length > 0){
+        chartDataList.value = list
+    }
     const elementsCNMap = {
         '1':'温度',
         '2':'湿度',
