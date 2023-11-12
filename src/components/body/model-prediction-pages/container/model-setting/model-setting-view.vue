@@ -5,7 +5,6 @@
                 <el-col :xs="20" :sm="20" :md="20" :lg="20" :xl="20">
                     <span class="setting-title">Select Model Configuration</span>
                 </el-col>
-                <setting-popover/>
             </el-row>
         </el-card>
         <setting-container/>
@@ -15,7 +14,6 @@
 <script setup>
 import SettingContainer
     from "@/components/body/model-prediction-pages/container/model-setting/setting-container.vue";
-import SettingPopover from "@/components/body/model-prediction-pages/container/model-setting/setting-popover.vue";
 
 
 </script>

@@ -6,7 +6,7 @@ export async function loginToSystem(authServiceData) {
     if (checkOnlyEngAndNumber(authServiceData.auth.password)) {
         authServiceData.isLogin = true
         const res = await login(authServiceData.auth)
-        if (res.data.code === 200){
+        if (res.data.success === 1){
             sessionStorage.setItem('auth', JSON.stringify(res.data.auth))
             setTimeout(()=>{
                 authServiceData.isLogin = false

@@ -43,8 +43,8 @@
         "img": "data-visualization.png"
       },
       {
-        "title": "多模型预测",
-        "des": "训练LSTM、ARIMA和Prophet模型,智能或手动加权平均预测结果",
+        "title": "长短期记忆神经网络预测",
+        "des": "训练LSTM模型,预测未来24小时或七日结果",
         "img": "multi-model-prediction.png"
       },
       {

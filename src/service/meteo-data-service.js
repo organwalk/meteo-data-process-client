@@ -139,8 +139,10 @@ export async function getMeteoModelInfoData(){
 export async function getMeteoModelPredictData(apiObj){
     const res = await getMeteoModelPrediction(apiObj)
     if (res.data.code === 200){
+        ElMessage.success("已成功获取预测结果")
         return res.data.data
     }else {
+        ElMessage.error(JSON.parse(JSON.stringify(res.data)).msg)
         return {}
     }
 }
@@ -154,7 +156,6 @@ export async function getMeteoModelPredictionApiObj(configForm,planType){
         return  {
             ...baseObj,
             ...{
-                end_date:configForm.date,
                 model_type:'SHORTTERM_LSTM'
             }
         }
@@ -162,7 +163,6 @@ export async function getMeteoModelPredictionApiObj(configForm,planType){
         return  {
             ...baseObj,
             ...{
-                end_date:configForm.end_date,
                 model_type:'LONGTERM_LSTM'
             }
         }
@@ -178,8 +178,10 @@ export async function getMeteoCorrelationDataList(analyzeForm){
     }
     const res = await getMeteoCorrelation(apiObj)
     if (res.data.code === 200){
+        ElMessage.success("已成功获取分析结果")
         return res.data.data
     }else {
+        ElMessage.error(JSON.parse(JSON.stringify(res.data)).msg)
         return []
     }
 }

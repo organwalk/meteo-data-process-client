@@ -2,9 +2,9 @@
     <el-row style="height: 10vh">
         <el-col :xs="8" :sm="6" :md="4" :lg="1" :xl="1" />
         <el-col :xs="24" :sm="24" :md="24" :lg="22" :xl="24" >
-            <el-row style="background-color: #ffffff" >
+            <el-row style="background-color: #ffffff">
                 <client-header-logo />
-                <el-col :xs="8" :sm="6" :md="4" :lg="8" :xl="1" />
+                <el-col :xs="8" :sm="6" :md="4" :lg="4" :xl="1" />
                 <client-header-tab />
             </el-row>
         </el-col>

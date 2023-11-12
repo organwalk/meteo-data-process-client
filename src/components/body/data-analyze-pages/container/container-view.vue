@@ -112,7 +112,9 @@ watchEffect(async ()=>{
     validDates.value = await getStationValidDatesList(analyzeForm.station)
     loading.value = false
     setDateAndEndDate()
-    await startAnalyze()
+   if (!Object.keys(analyzeForm).some(key => !analyzeForm[key])){
+     await startAnalyze()
+   }
 })
 const startAnalyze = async () => {
     const list = await getMeteoCorrelationDataList(analyzeForm)

@@ -19,7 +19,7 @@ export async function getStationData(loading){
 export async function getStartDate(station){
     const res = await getStationDate(station)
     if (res.data.success === 1){
-        return res.data.date[0]
+        return res.data.data[0]
     }else {
         return ""
     }
@@ -29,7 +29,7 @@ export async function getStartDate(station){
 export async function getStationValidDatesList(station){
     const res = await getStationDate(station)
     if (res.data.success === 1){
-        return res.data.date
+        return res.data.data
     }else {
         return []
     }

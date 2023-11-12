@@ -95,3 +95,19 @@ export function notEmptyValues(obj) {
         return value !== null && value !== undefined && value !== '';
     });
 }
+
+export function getFutureDates(startDate, numDays) {
+    const futureDates = [];
+    const currentDate = new Date(startDate);
+
+    for (let i = 0; i < numDays; i++) {
+        const futureDate = new Date(currentDate.getTime() + i * 24 * 60 * 60 * 1000);
+        const year = futureDate.getFullYear();
+        const month = String(futureDate.getMonth() + 1).padStart(2, '0');
+        const day = String(futureDate.getDate()).padStart(2, '0');
+        const dateString = `${year}-${month}-${day}`;
+        futureDates.push(dateString);
+    }
+
+    return futureDates;
+}

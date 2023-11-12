@@ -24,16 +24,6 @@
                                 style="width: 100%"
                             />
                         </el-col>
-                        <el-col v-if="planType !== '24小时预测'" :xs="getStartDateSpan()" :sm="getStartDateSpan()" :md="getStartDateSpan()" :lg="getStartDateSpan()" :xl="getStartDateSpan()">
-                            <el-date-picker
-                                v-model="configForm.end_date"
-                                type="date"
-                                :disabled-date="disabledDate"
-                                @change="changeEndDateToISO"
-                                :clearable="false"
-                                style="width: 100%"
-                            />
-                        </el-col>
                         <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6" align="left">
                             <el-button type="primary" color="#2261ec" style="width: 90%" @click="startPrediction()">开始预测</el-button>
                         </el-col>
@@ -47,7 +37,7 @@
 <script setup>
 import {onMounted, reactive, ref, watch, watchEffect} from "vue";
 import {getStationData, getStationValidDatesList} from "@/service/station-service";
-import {getDisabledDate, getGMTTimeToStrISO8601} from "@/utils/utils";
+import {getDisabledDate, getFutureDates, getGMTTimeToStrISO8601} from "@/utils/utils";
 import {ElMessage} from "element-plus";
 import {useStore} from "vuex";
 import SettingContainerReport
@@ -78,7 +68,8 @@ const startPrediction = async () => {
     const data = await getMeteoModelPredictData(apiObj)
     let hour = 0;
     let minute = 0;
-    for (let i = 0; i < data.length; i++) {
+    if (planType.value === '24小时预测'){
+      for (let i = 0; i < data.length; i++) {
         let innerArray = data[i];
         // 添加时间
         let time = (hour < 10 ? '0' + hour : hour) + ':' + (minute < 10 ? '0' + minute : minute);
@@ -86,9 +77,16 @@ const startPrediction = async () => {
         // 更新时间
         hour++;
         if (hour === 24) {
-            hour = 0;
-            minute++;
+          hour = 0;
+          minute++;
         }
+      }
+    }else if (planType.value === '未来七日预测'){
+      const future = getFutureDates(configForm.date, 7)
+     for (let i = 0; i < data.length; i++){
+       let innerArray = data[i];
+       innerArray.unshift(future[i])
+     }
     }
     await store.dispatch('updatePredictionList',data)
     loading.value = false
@@ -107,7 +105,7 @@ watchEffect(async ()=>{
     if (stationList.value.length !== 0) {
         configForm.station = stationList.value[0].station
     }
-    validDates.value = (await getStationValidDatesList(configForm.station)).splice(0,9)
+    validDates.value = await getStationValidDatesList(configForm.station)
     loading.value = false
     setDateAndEndDate()
 })
@@ -133,26 +131,14 @@ const changeDateToISO = () => {
         ElMessage.warning("起始时间不能大于结束时间")
     }
 }
-const changeEndDateToISO = () => {
-    configForm.end_date = getGMTTimeToStrISO8601(configForm.end_date)
-    if (planType.value !== "24小时预测" && configForm.date > configForm.end_date){
-        configForm.end_date = configForm.date
-        ElMessage.warning("结束时间不能早于起始时间")
-    }
-}
 const setDateAndEndDate = () => {
-    if (planType.value !== "24小时预测"){
-        configForm.date = validDates.value[validDates.value.length - 7]
-        configForm.end_date = validDates.value[validDates.value.length - 1]
-    }else {
-        configForm.date = validDates.value[validDates.value.length - 1]
-    }
+  configForm.date = validDates.value[validDates.value.length - 1]
 }
 const getStartDateSpan = () => {
     if (planType.value === "24小时预测"){
         return 18
     }else {
-        return 9
+        return 18
     }
 }
 onMounted(async ()=>{

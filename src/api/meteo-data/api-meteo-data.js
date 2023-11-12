@@ -36,3 +36,8 @@ export function getMeteoModelPrediction(apiObj){
 export function getMeteoCorrelation(apiObj){
     return http.json_auth_post('/anapredict/analyze/correlation', apiObj)
 }
+
+// 获取模型报告
+export function getModelReport(obj){
+    return http.json_auth_post('/anapredict/model/report', obj)
+}
