@@ -8,22 +8,33 @@
 </template>
 
 <script setup>
-import {computed, reactive, ref, watchEffect} from "vue";
+import {reactive, ref, watchEffect} from "vue";
 import {useStore} from "vuex";
 import {getStationMeteoDataCountByMonthList} from "@/service/station-service";
 
 const store = useStore()
 const statisticsTableData = ref([])
 const storeData = reactive({
-    station:computed(()=>store.state.mainPages.nowStation),
-    pickMonth:computed(()=>store.state.mainPages.nowPickMonth)
+    station:"",
+    pickMonth:""
 })
 
+const year = ref()
+const month = ref()
+watchEffect(() => {
+  storeData.station = store.state.mainPages.nowStation
+  storeData.pickMonth = store.state.mainPages.nowPickMonth
+})
+
+watchEffect(() => {
+  if (storeData.pickMonth){
+    year.value = storeData.pickMonth.substring(0, 4)
+    month.value = storeData.pickMonth.substring(5, 7)
+  }
+})
 watchEffect(async () => {
-    if (storeData.station && storeData.pickMonth) {
-        let year = storeData.pickMonth.substring(0, 4)
-        let month = storeData.pickMonth.substring(5, 7)
-        statisticsTableData.value = await getStationMeteoDataCountByMonthList(storeData.station, year, month)
+    if (storeData.station && month.value) {
+        statisticsTableData.value = await getStationMeteoDataCountByMonthList(storeData.station, year.value, month.value)
     }
 })
 </script>

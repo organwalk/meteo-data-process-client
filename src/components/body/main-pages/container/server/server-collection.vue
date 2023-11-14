@@ -10,6 +10,7 @@
                         <el-date-picker
                             v-model="collectionData.pickMonth"
                             type="month"
+                            @change="change"
                             :disabled-date="disabledDate"
                             :editable="false"
                             :clearable="false"
@@ -37,7 +38,7 @@ import CollectionStatisticsCard
     from "@/components/body/main-pages/container/server/server-collection-statistics-card.vue";
 import {useStore} from "vuex";
 import {getStationValidDatesList} from "@/service/station-service";
-import {getDisabledDate} from "@/utils/utils";
+import {formatDate, getDisabledDate} from "@/utils/utils";
 import ServerCollectionAnalyzeCard
     from "@/components/body/main-pages/container/server/server-collection-analyze-card.vue";
 
@@ -50,15 +51,20 @@ const collectionData = reactive({
 const validDates = ref([])
 
 watchEffect(async () => {
+  if (collectionData.station){
     validDates.value = await getStationValidDatesList(collectionData.station)
     collectionData.pickMonth = validDates.value[validDates.value.length - 1]
     await store.dispatch('updateNowPickMonth',collectionData.pickMonth)
+  }
 })
 
 const disabledDate = (date) => {
     return getDisabledDate(date,validDates)
 }
 
+const change = async () => {
+  await store.dispatch('updateNowPickMonth',formatDate(collectionData.pickMonth))
+}
 </script>
 
 <style scoped>

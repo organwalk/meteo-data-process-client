@@ -42,8 +42,6 @@ export function getADayMeteoChart(meteoDataList) {
 
 export function getCorrelationChart(data,labels) {
     const myChart = echarts.init(document.getElementById('correlationChart'));
-    // const data = [[1.0, 0.55, 0.0, 0.0, 0.0, 0.18, -0.43, 0.0], [0.55, 1.0, 0.0, 0.0, 0.0, -0.01, -0.56, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.18, -0.01, 0.0, 0.0, 0.0, 1.0, 0.15, 0.0], [-0.43, -0.56, 0.0, 0.0, 0.0, 0.15, 1.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
-    // const labels = ['温度', '湿度', '风速', '风向', '降雨', '光照', 'PM25', 'PM10'];
     const seriesData = [];
     for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data[i].length; j++) {

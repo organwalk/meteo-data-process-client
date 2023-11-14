@@ -14,7 +14,11 @@ const store= useStore()
 watch(() => store.state.mainPages.queryType, (newVal, oldVal) => {
     if (newVal !== oldVal) {
         nextTick(() => {
-            window.scrollTo(0, 0);
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+            passive: true
+          });
         });
     }
 });

@@ -12,6 +12,10 @@ export function syncDateRange(){
     return http.get('/qx/obtain/sync/date_range')
 }
 
-export function syncLatestDate(){
-    return http.get('/qx/obtain/sync/latest_date')
+export function syncLatestDate(station){
+    return http.get('/qx/obtain/sync/latest_date?station=' + station)
+}
+
+export function syncHavingData(station){
+    return http.get('/qx/obtain/sync/exist?station=' + station)
 }
