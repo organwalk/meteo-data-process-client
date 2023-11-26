@@ -27,7 +27,7 @@
 <script setup>
 import config from "@/config/main-page-config.json"
 import {useStore} from "vuex";
-import {onBeforeMount, reactive, watchEffect} from "vue";
+import {reactive, watchEffect} from "vue";
 import ServerCard from "@/components/body/main-pages/container/server/server-card.vue";
 import {getStartDate} from "@/service/station-service";
 import {ElMessage} from "element-plus";
