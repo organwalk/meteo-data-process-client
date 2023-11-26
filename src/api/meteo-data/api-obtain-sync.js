@@ -19,3 +19,7 @@ export function syncLatestDate(station){
 export function syncHavingData(station){
     return http.get('/qx/obtain/sync/exist?station=' + station)
 }
+
+export function syncMeteoDataByInfo(obj){
+    return http.json_auth_post('/qx/obtain/sync/meteo_data', obj)
+}

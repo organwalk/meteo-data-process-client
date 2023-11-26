@@ -33,8 +33,8 @@
     <el-row>
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" align="center">
         <h3 v-show="!disSync">气象站共有 <el-text type="danger" size="large">{{count}}</el-text> 份数据待同步更新</h3>
-        <h3 v-show="!disClear">气象站共有 <el-text type="danger" size="large">{{count}}</el-text> 份数据待清洗</h3>
-        <h3 v-show="!disClear && !disSync">服务器内的气象站数据已处于最新状态</h3>
+        <h3 v-show="!disClear">气象站共有 <el-text type="danger" size="large">{{cleanCount}}</el-text> 份数据待清洗</h3>
+        <h3 v-show="disClear && disSync">服务器内的气象站数据已处于最新状态</h3>
         <div v-show="startSync"><br/><br/></div>
         <el-progress v-show="startSync" style="width: 80%" :percentage="percentage" :color="colors" />
         <div><br/><br/></div>
@@ -45,7 +45,7 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" align="center">
         <el-button :icon="Refresh" @click="syncMeteoData" round :disabled="disSync">数据同步</el-button>
         <el-button :icon="Close" circle @click="dialogVisible = false" />
-        <el-button class="el-icon--right" @click="startSync = true" round :disabled="disClear">数据清洗
+        <el-button class="el-icon--right" @click="cleanMeteoData" round :disabled="disClear">数据清洗
           <el-icon class="el-icon--right"><DocumentChecked /></el-icon>
         </el-button>
       </el-col>
@@ -66,11 +66,12 @@ import {
   connectDataSaveServer,
   syncDateRange,
   syncHavingData,
-  syncLatestDate,
+  syncLatestDate, syncMeteoDataByInfo,
   syncStationData
 } from "@/api/meteo-data/api-obtain-sync";
 import {ElMessage} from "element-plus";
 import {getStationDate, getStationInfo} from "@/api/station/api-station";
+import {cleanedData, getLatestCleanedDate} from "@/api/meteo-data/api-meteo-data";
 const pushRouter = (route) => {
   window.location.href = route
 }
@@ -140,15 +141,20 @@ const syncStationDataRange = async () => {
       const dataList = await getMeteoDateList(item.station)
       if (latestDate !== ""){
         const processList = getDatesAfter(dataList, latestDate)
-        sessionStorage.setItem(item.station, processList)
+        sessionStorage.setItem(item.station, JSON.stringify(processList))
         count.value += processList.length
       }else {
         const existState = await syncHavingData(item.station)
-        if (existState === "false"){
-          sessionStorage.setItem(item.station, dataList)
+        if (existState.data.data === "false"){
+          sessionStorage.setItem(item.station, JSON.stringify(dataList))
         }
         count.value += Number(dataList.length)
       }
+    }
+    if (count.value === 0) {
+      disClear.value = false
+      disSync.value = true
+      await getWaitingCleanedDate()
     }
     badgeValue.value = String(count.value)
   }else {
@@ -158,15 +164,85 @@ const syncStationDataRange = async () => {
 }
 
 // 同步气象数据
-const syncMeteoData = () => {
+const syncMeteoData = async () => {
   startSync.value = true
   let i = 1
-  while (i < count.value){
-    if (i <= count.value) {
-      let result = (i / count.value) * 100;
-      percentage.value = Math.round(result);
-      i++;
+  // 遍历获取需要同步的气象站有效日期
+  const stations = JSON.parse(sessionStorage.getItem("stations"))
+  for (const station of stations) {
+    const dateList = JSON.parse(sessionStorage.getItem(station))
+    for (const date of dateList) {
+      await syncMeteoDataByInfo({
+        station: station,
+        start: date,
+        end: date
+      })
+      percentage.value = Math.round((i / dateList.length) * 100);
+      i++
     }
+    i = 1
+  }
+  badgeValue.value = '!'
+  disClear.value = false
+  disSync.value = true
+}
+
+// 计算有多少数据待清洗
+const cleanCount = ref(0)
+const getWaitingCleanedDate = async () => {
+  const res = await syncDateRange()
+  if (res.data.success === 1){
+    ElMessage.success(res.data.data)
+    const station = await getStationInfo()
+    for (const item of station.data.station){
+      const dateRes = await getLatestCleanedDate(item.station)
+      let latestDate
+      if (dateRes.data.code === 200){
+        latestDate = dateRes.data.data
+      }else {
+        latestDate = ""
+      }
+      const dataList = await getMeteoDateList(item.station)
+      if (latestDate !== ""){
+        const processList = getDatesAfter(dataList, latestDate)
+        sessionStorage.setItem('clean' + item.station, JSON.stringify(processList))
+        cleanCount.value += Number(processList.length)
+      }else {
+        const existState = await syncHavingData(item.station)
+        if (existState.data.data === "true"){
+          sessionStorage.setItem('clean' + item.station, JSON.stringify(dataList))
+        }
+        cleanCount.value += Number(dataList.length)
+      }
+    }
+    if (cleanCount.value === 0) {
+      disClear.value = true
+    }
+    badgeValue.value = String(count.value)
+  }else {
+    ElMessage.warning(res.data.data)
+    badgeValue.value = '!'
+  }
+}
+
+// 清洗数据
+const cleanMeteoData = async () => {
+  startSync.value = true
+  let i = 1
+  // 遍历获取需要同步的气象站有效日期
+  const stations = JSON.parse(sessionStorage.getItem("stations"))
+  for (const station of stations) {
+    const dateList = JSON.parse(sessionStorage.getItem("clean" + station))
+    for (const date of dateList) {
+      await cleanedData({
+        station: station,
+        start_date: date,
+        end_date: date
+      })
+      percentage.value = Math.round((i / dateList.length) * 100);
+      i++
+    }
+    i = 1
   }
   badgeValue.value = '!'
   disClear.value = false
@@ -201,6 +277,12 @@ const getDatesAfter = (dataList, latestDate) => {
   // 将日期对象转换回日期字符串
   return datesAfterLatest.map(date => date.toISOString().split('T')[0]);
 }
+watchEffect(() => {
+  if (count.value === 0 && cleanCount.value === 0){
+    disClear.value = true
+    disSync.value = true
+  }
+})
 
 onBeforeMount(async () => {
   if (nowPath.value === '/main'){

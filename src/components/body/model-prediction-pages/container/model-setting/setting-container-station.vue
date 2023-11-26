@@ -12,16 +12,21 @@
 </template>
 
 <script setup>
-import {computed, defineProps, defineEmits, watchEffect} from 'vue'
+import {defineProps, defineEmits, watchEffect, ref} from 'vue'
 const props = defineProps({
     station:String,
     stationList:Array
 })
-const station = computed(()=>props.station)
-const emit = defineEmits(['getNewStation'])
+const emit = defineEmits(['getStation'])
+const station = ref()
+watchEffect(() => {
+  if (props.station){
+    station.value = props.station
+  }
+})
 watchEffect(() => {
   if (station.value){
-    emit('getNewStation', station.value)
+    emit('getStation', station)
   }
 })
 </script>

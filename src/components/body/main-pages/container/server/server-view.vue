@@ -27,7 +27,7 @@
 <script setup>
 import config from "@/config/main-page-config.json"
 import {useStore} from "vuex";
-import {computed, onBeforeMount, reactive, watchEffect} from "vue";
+import {onBeforeMount, reactive, watchEffect} from "vue";
 import ServerCard from "@/components/body/main-pages/container/server/server-card.vue";
 import {getStartDate} from "@/service/station-service";
 import {ElMessage} from "element-plus";
@@ -35,11 +35,30 @@ import ServerCollection from "@/components/body/main-pages/container/server/serv
 
 const store = useStore()
 const serverData = reactive({
-    storeStationList:computed(()=>store.state.mainPages.stationList),
+    storeStationList:[],
     selectStation:'',
     loading:true,
     stationName:'',
     startDate:''
+})
+watchEffect(async () => {
+  if (store.state.mainPages.stationList){
+    serverData.storeStationList = store.state.mainPages.stationList
+    if (serverData.storeStationList.length !== 0) {
+      serverData.selectStation = await serverData.storeStationList[0].station
+    }
+    if (serverData.selectStation){
+      await store.dispatch('updateNowStation', serverData.selectStation)
+      serverData.stationName = serverData.storeStationList.find((item) => {
+        return item.station === serverData.selectStation
+      }).name
+      serverData.startDate = await getStartDate(serverData.selectStation)
+      if (serverData.startDate === ""){
+        ElMessage.error("内部服务错误，请重试")
+      }
+      serverData.loading = false
+    }
+  }
 })
 watchEffect(async () => {
     if (serverData.selectStation){
@@ -53,24 +72,6 @@ watchEffect(async () => {
         }
         serverData.loading = false
     }
-})
-
-onBeforeMount(async () => {
-  if (serverData.storeStationList.length !== 0) {
-    serverData.selectStation = serverData.storeStationList[0].station
-  }
-  if (serverData.selectStation){
-    await store.dispatch('updateNowStation', serverData.selectStation)
-    serverData.stationName = serverData.storeStationList.find((item) => {
-      return item.station === serverData.selectStation
-    }).name
-    serverData.startDate = await getStartDate(serverData.selectStation)
-    if (serverData.startDate === ""){
-      ElMessage.error("内部服务错误，请重试")
-    }
-    serverData.loading = false
-  }
-  serverData.loading = false
 })
 </script>
 

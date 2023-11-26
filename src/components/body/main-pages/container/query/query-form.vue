@@ -111,7 +111,7 @@
 </template>
 
 <script setup>
-import {computed, reactive, ref, watch, watchEffect} from "vue";
+import {computed, onMounted, reactive, ref, watch, watchEffect} from "vue";
 import config from "@/config/main-page-config.json"
 import {useStore} from "vuex";
 import {checkMeteoElementsNotNull, getDisabledDate, getGMTTimeToStrISO8601, notEmptyValues} from "@/utils/utils";
@@ -175,13 +175,21 @@ const editData = reactive({
     editObj:{}
 })
 
-watchEffect(async ()=>{
-    if (formData.storeStationList.length !== 0) {
-        formData.selectStation = formData.storeStationList[0].station
-    }
+onMounted(async () => {
+  if (formData.storeStationList.length !== 0) {
+    formData.selectStation = formData.storeStationList[0].station
     validDates.value = await getStationValidDatesList(formData.selectStation)
     loadingForm.value = false
     setDateAndEndDate()
+  }
+})
+watchEffect(async ()=>{
+    if (formData.selectStation){
+      validDates.value = await getStationValidDatesList(formData.selectStation)
+      loadingForm.value = false
+      setDateAndEndDate()
+    }
+
 })
 watch(() => store.state.mainPages.queryType, (newVal, oldVal) => {
     if (newVal !== oldVal) {

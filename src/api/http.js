@@ -52,12 +52,13 @@ const http = {
             method:'get',
             url:url,
             headers:{
+                'Content-Type': 'application/json',
                 'name':JSON.parse(sessionStorage.getItem("auth")).name,
                 'access_token':JSON.parse(sessionStorage.getItem("auth")).access_token
             }
         }
         if (params) config.params = params
         return request(config)
-    },
+    }
 }
 export default http

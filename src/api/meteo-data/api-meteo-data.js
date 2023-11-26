@@ -41,3 +41,11 @@ export function getMeteoCorrelation(apiObj){
 export function getModelReport(obj){
     return http.json_auth_post('/anapredict/model/report', obj)
 }
+
+export function cleanedData(obj){
+    return http.json_auth_post('/anapredict/cleaned', obj)
+}
+
+export function getLatestCleanedDate(station){
+    return http.json_auth_post('/anapredict/latest_date', {station: station})
+}

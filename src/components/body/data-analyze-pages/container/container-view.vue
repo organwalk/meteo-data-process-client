@@ -86,8 +86,6 @@ import {getStationData, getStationValidDatesList} from "@/service/station-servic
 import {checkMeteoElementsNotNull, getDisabledDate, getGMTTimeToStrISO8601} from "@/utils/utils";
 import {ElMessage} from "element-plus";
 import {getMeteoCorrelationDataList} from "@/service/meteo-data-service";
-// import {getMeteoCorrelationDataList} from "@/service/meteo-data-service";
-
 
 const analyzeForm = reactive({
     station:'',
@@ -106,12 +104,11 @@ const disabledDate = (date) => {
 }
 watchEffect(async ()=>{
     loading.value = true
-    if (stationList.value.length !== 0) {
-        analyzeForm.station = stationList.value[0].station
+    if (analyzeForm.station){
+      validDates.value = await getStationValidDatesList(analyzeForm.station)
+      loading.value = false
+      setDateAndEndDate()
     }
-    validDates.value = await getStationValidDatesList(analyzeForm.station)
-    loading.value = false
-    setDateAndEndDate()
    if (!Object.keys(analyzeForm).some(key => !analyzeForm[key])){
      await startAnalyze()
    }

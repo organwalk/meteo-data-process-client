@@ -5,6 +5,8 @@ import {ElMessage} from "element-plus";
 export async function getStationData(loading){
     const res = await getStationInfo()
     if (res.data.success === 1){
+        const stationCode = res.data.station.map(item => item.station)
+        await sessionStorage.setItem("stations", JSON.stringify(stationCode))
         return  {
             numberOfStation:res.data.station.length,
             stationList:res.data.station
@@ -35,7 +37,7 @@ export async function getStationValidDatesList(station){
     }
 }
 
-//获取任意月份下每日数据总量
+// 获取任意月份下每日数据总量
 export async function getStationMeteoDataCountByMonthList(station,year,month){
     const res = await getStationCollectionDataCountByMonth(station,String(year),String(month))
     if (res.data.success === 1){
