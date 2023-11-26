@@ -10,7 +10,7 @@ import config from "@/config/main-page-config.json";
 import {ElMessage} from "element-plus";
 
 export async function getMeteoByDayAboutStatusAndDataList(station, selectMeteoElement){
-    const res = await getMeteoDataByDay(station.station, '2023-07-27', selectMeteoElement.value, '2')
+    const res = await getMeteoDataByDay(station.station, '2023-11-07', selectMeteoElement.value, '2')
     return {
         status:res.data.success,
         dataList:res.data.data

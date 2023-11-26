@@ -85,7 +85,7 @@ const getButtonBackGroundColor = (route) => {
 }
 
 const nowPath = ref(window.location.pathname)
-const badgeValue = ref('!')
+const badgeValue = ref()
 const badgeType = ref('danger')
 const setHidden = (val) => {
   return val === '0' && val !== '!';
@@ -112,7 +112,7 @@ const connectServer = async () => {
     await syncStationCodeServer()
   }else {
     ElMessage.warning(res.data.data)
-    badgeValue.value = '!'
+    // badgeValue.value = '!'
   }
 }
 

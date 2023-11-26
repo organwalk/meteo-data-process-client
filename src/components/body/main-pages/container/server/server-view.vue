@@ -27,7 +27,7 @@
 <script setup>
 import config from "@/config/main-page-config.json"
 import {useStore} from "vuex";
-import {computed, reactive, watchEffect} from "vue";
+import {computed, onBeforeMount, reactive, watchEffect} from "vue";
 import ServerCard from "@/components/body/main-pages/container/server/server-card.vue";
 import {getStartDate} from "@/service/station-service";
 import {ElMessage} from "element-plus";
@@ -42,9 +42,6 @@ const serverData = reactive({
     startDate:''
 })
 watchEffect(async () => {
-    if (serverData.storeStationList.length !== 0) {
-        serverData.selectStation = serverData.storeStationList[0].station
-    }
     if (serverData.selectStation){
         await store.dispatch('updateNowStation', serverData.selectStation)
         serverData.stationName = serverData.storeStationList.find((item) => {
@@ -56,6 +53,24 @@ watchEffect(async () => {
         }
         serverData.loading = false
     }
+})
+
+onBeforeMount(async () => {
+  if (serverData.storeStationList.length !== 0) {
+    serverData.selectStation = serverData.storeStationList[0].station
+  }
+  if (serverData.selectStation){
+    await store.dispatch('updateNowStation', serverData.selectStation)
+    serverData.stationName = serverData.storeStationList.find((item) => {
+      return item.station === serverData.selectStation
+    }).name
+    serverData.startDate = await getStartDate(serverData.selectStation)
+    if (serverData.startDate === ""){
+      ElMessage.error("内部服务错误，请重试")
+    }
+    serverData.loading = false
+  }
+  serverData.loading = false
 })
 </script>
 
