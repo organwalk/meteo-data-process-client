@@ -1,24 +1,9 @@
-# meteo-data-process-client
+# 信创技术下气象数据分析预测系统--Web客户端
 
-## Project setup
-```
-npm install
-```
+本项目是信创技术下气象数据分析预测系统的Web客户端，提供气象数据的查询、分析和预测服务。该客户端需要与其服务端相联动。
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+服务端地址：
 
-### Compiles and minifies for production
-```
-npm run build
-```
+[信创技术下气象数据分析预测系统--获取、处理、用户和网关服务](https://github.com/organwalk/MeteoDataProcessServer)
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[信创技术下的气象数据分析预测系统--清洗、分析和预测子服务](https://github.com/organwalk/meteo-anapredict-server)
