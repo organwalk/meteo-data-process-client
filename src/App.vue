@@ -1,38 +1,29 @@
 <template>
-    <el-card id="box" body-style="padding-left:0;padding-right:0;padding-bottom:0" >
-        <client-header/>
-        <router-view/>
-    </el-card>
+  <el-card id="app-shell" body-style="padding-left: 0; padding-right: 0; padding-bottom: 0;">
+    <client-header />
+    <router-view />
+  </el-card>
 </template>
 
 <script setup>
-import ClientHeader from "@/components/headers/client-header.vue";
-import {nextTick,watch,} from "vue";
-import {useStore} from "vuex";
-
-const store= useStore()
-watch(() => store.state.mainPages.queryType, (newVal, oldVal) => {
-    if (newVal !== oldVal) {
-        nextTick(() => {
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-            passive: true
-          });
-        });
-    }
-});
-
+import ClientHeader from '@/components/headers/client-header.vue'
 </script>
 
 <style>
-body{
-    overflow-y: auto !important;
-    padding-right: 0 !important;
+body {
+  margin: 0;
+  background-color: #f5f7fa;
+  overflow-y: auto !important;
+  padding-right: 0 !important;
 }
-#box{
-    width: 100%;border-radius: 15px;
+
+#app {
+  min-height: 100vh;
+}
+
+#app-shell {
+  width: 100%;
+  min-height: 100vh;
+  border-radius: 15px;
 }
 </style>
-
-

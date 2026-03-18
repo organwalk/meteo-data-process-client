@@ -1,25 +1,27 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import routes from "./router"
-import {ElMessage} from "element-plus";
+import routes from '@/router/routes'
+import { pinia } from '@/stores'
+import { useAuthStore } from '@/stores/auth'
+import { evaluateRouteAccess } from '@/router/guards'
 
-const router =createRouter({
-    history:createWebHistory(),
-    routes
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+  scrollBehavior() {
+    return { top: 0 }
+  },
 })
 
-router.beforeEach((to, from, next) => {
-    if (!sessionStorage.getItem("auth")) {
-        if (to.name === "index"){
-            next()
-        }else {
-            ElMessage.warning("您尚未登录")
-            setTimeout(()=>{
-                window.location.href = "/"
-            },1000)
-        }
-    } else {
-        next()
-    }
+router.beforeEach((to) => {
+  const authStore = useAuthStore(pinia)
+  authStore.hydrateSession()
+  const accessResult = evaluateRouteAccess(to, authStore.isAuthenticated)
+
+  if (!accessResult.allow) {
+    return accessResult.redirect
+  }
+
+  return true
 })
 
 export default router

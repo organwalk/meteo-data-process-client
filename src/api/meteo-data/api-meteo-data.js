@@ -1,51 +1,118 @@
-import http from "@/api/http";
-import {buildQueryURL} from "@/utils/utils";
+import apiClient from '@/lib/http/api-client'
 
-export function getMeteoDataByHour(apiObj){
-    return http.query_auth_post(
-        buildQueryURL('/qx/stat_hour', apiObj)
-    )
+export function getMeteoDataByHour(apiObj) {
+  return apiClient.post('/qx/stat_hour', null, {
+    params: apiObj,
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function getMeteoDataByDay(station, date, which, type){
-    return http.query_auth_post(
-        buildQueryURL('/qx/stat_day', {station,date,which,type})
-    )
+export function getMeteoDataByDay(station, date, which, type) {
+  return apiClient.post('/qx/stat_day', null, {
+    params: {
+      station,
+      date,
+      which,
+      type,
+    },
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function getMeteoDataByDate(apiObj){
-    return http.query_auth_post(
-        buildQueryURL('/qx/stat_day_range', apiObj)
-    )
+export function getMeteoDataByDate(apiObj) {
+  return apiClient.post('/qx/stat_day_range', null, {
+    params: apiObj,
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function getMeteoDataByComplex(apiObj){
-    return http.query_auth_post(
-        buildQueryURL('/qx/query', apiObj)
-    )
+export function getMeteoDataByComplex(apiObj) {
+  return apiClient.post('/qx/query', null, {
+    params: apiObj,
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function getMeteoModelInfo(){
-    return http.get('/anapredict/model/info')
+export function getMeteoModelInfo() {
+  return apiClient.get('/anapredict/model/info', {
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function getMeteoModelPrediction(apiObj){
-    return http.json_auth_post('/anapredict/model/prediction',apiObj)
+export function getMeteoModelPrediction(apiObj) {
+  return apiClient.post('/anapredict/model/prediction', apiObj, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    meta: {
+      auth: true,
+    },
+  })
 }
 
-export function getMeteoCorrelation(apiObj){
-    return http.json_auth_post('/anapredict/analyze/correlation', apiObj)
+export function getMeteoCorrelation(apiObj) {
+  return apiClient.post('/anapredict/analyze/correlation', apiObj, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    meta: {
+      auth: true,
+    },
+  })
 }
 
-// 获取模型报告
-export function getModelReport(obj){
-    return http.json_auth_post('/anapredict/model/report', obj)
+export function getModelReport(apiObj) {
+  return apiClient.post('/anapredict/model/report', apiObj, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function cleanedData(obj){
-    return http.json_auth_post('/anapredict/cleaned', obj)
+export function cleanedData(apiObj) {
+  return apiClient.post('/anapredict/cleaned', apiObj, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    meta: {
+      auth: true,
+    },
+  })
 }
 
-export function getLatestCleanedDate(station){
-    return http.json_auth_post('/anapredict/latest_date', {station: station})
+export function getLatestCleanedDate(station) {
+  return apiClient.post(
+    '/anapredict/latest_date',
+    {
+      station,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      meta: {
+        auth: true,
+        retryOnTimeout: true,
+      },
+    },
+  )
 }

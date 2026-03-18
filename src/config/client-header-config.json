@@ -17,6 +17,6 @@
         "route": "/modelPrediction"
       }
     ],
-    "sign_out":"Sign out"
+    "sign_out": "退出登录"
   }
 }

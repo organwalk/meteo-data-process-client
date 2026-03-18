@@ -1,14 +1,36 @@
-import http from "@/api/http";
-import {buildQueryURL} from "@/utils/utils";
+import apiClient from '@/lib/http/api-client'
 
-export function getStationInfo(){
-    return http.get('/qx/stations')
+export function getStationInfo() {
+  return apiClient.get('/qx/stations', {
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function getStationDate(station){
-    return http.get(buildQueryURL('/qx/stations',{station}))
+export function getStationDate(station) {
+  return apiClient.get('/qx/stations', {
+    params: {
+      station,
+    },
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function getStationCollectionDataCountByMonth(station,year,month){
-    return http.get(buildQueryURL('/qx/data_sum',{station,year,month}))
+export function getStationCollectionDataCountByMonth(station, year, month) {
+  return apiClient.get('/qx/data_sum', {
+    params: {
+      station,
+      year,
+      month,
+    },
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }

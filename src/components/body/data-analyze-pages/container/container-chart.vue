@@ -1,25 +1,63 @@
 <template>
-    <div id="correlationChart" style="width: 100%; height: 100vh"></div>
+  <div ref="chartRef" class="correlation-chart"></div>
 </template>
 
 <script setup>
-import {getCorrelationChart} from "@/service/chart-service";
-import {computed, defineProps, watchEffect} from "vue";
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { createCorrelationChartOptions, echarts } from '@/service/chart-service'
 
 const props = defineProps({
-    elements:Array,
-    correlationList:Array
+  elements: {
+    type: Array,
+    default: () => [],
+  },
+  correlationList: {
+    type: Array,
+    default: () => [],
+  },
 })
-const elements = computed(()=>props.elements)
-const correlationList = computed(()=> props.correlationList)
 
-watchEffect(()=>{
-    if (elements.value.length !==0 && correlationList.value.length !== 0){
-        getCorrelationChart(correlationList.value, elements.value)
-    }
+const chartRef = ref(null)
+let chartInstance = null
+
+function resizeChart() {
+  chartInstance?.resize()
+}
+
+function renderChart() {
+  if (!chartInstance || props.elements.length === 0 || props.correlationList.length === 0) {
+    return
+  }
+
+  chartInstance.setOption(createCorrelationChartOptions(props.correlationList, props.elements), true)
+}
+
+onMounted(() => {
+  if (chartRef.value) {
+    chartInstance = echarts.init(chartRef.value)
+    window.addEventListener('resize', resizeChart)
+    renderChart()
+  }
 })
+
+onUnmounted(() => {
+  window.removeEventListener('resize', resizeChart)
+  chartInstance?.dispose()
+  chartInstance = null
+})
+
+watch(
+  () => [props.elements, props.correlationList],
+  renderChart,
+  {
+    deep: true,
+  },
+)
 </script>
 
 <style scoped>
-
+.correlation-chart {
+  width: 100%;
+  height: 100vh;
+}
 </style>

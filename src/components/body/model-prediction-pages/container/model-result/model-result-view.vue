@@ -1,40 +1,51 @@
 <template>
   <el-card id="model-result-view" shadow="never">
-      <div v-if="useTableData.length !== 0">
-          <el-table :data="useTableData" border style="width: 100%;" height="700">
-              <el-table-column v-for="(name, index) in tableHeader" :key="index" :prop="name" :label="name"
-                               align="center"/>
-          </el-table>
-      </div>
-      <el-empty v-if="useTableData.length === 0" style="height: 80vh" :image="getImagePath('not_found.png')" description="暂未开始预测"></el-empty>
+    <div v-if="tableRows.length !== 0">
+      <el-table :data="tableRows" border style="width: 100%;" height="700">
+        <el-table-column
+          v-for="(name, index) in tableHeader"
+          :key="index"
+          :prop="name"
+          :label="name"
+          align="center"
+        />
+      </el-table>
+    </div>
+    <el-empty
+      v-else
+      style="height: 80vh"
+      :image="getImagePath('not_found.png')"
+      description="暂未开始预测"
+    />
   </el-card>
 </template>
 
 <script setup>
-import {nextTick, ref, watch} from "vue";
-import {useStore} from "vuex";
-import {convertToObjectArrayFrom2DArray, getImagePath} from "@/utils/utils";
+import { computed, watch } from 'vue'
+import { METEO_TABLE_HEADER } from '@/constants/meteo'
+import { convertToObjectArrayFrom2DArray, getImagePath } from '@/utils/utils'
+import { usePredictionStore } from '@/stores/prediction'
 
-const useTableData = ref([])
-const tableHeader = ref(['时间','温度','湿度','风速','风向','降雨量','光照','PM25','PM10'])
-const store = useStore()
+const predictionStore = usePredictionStore()
+const tableHeader = METEO_TABLE_HEADER
+const tableRows = computed(() => convertToObjectArrayFrom2DArray(predictionStore.predictionList, tableHeader))
 
-watch(()=>store.state.modelPredictionPages.predictionList,(newVal)=>{
-    if (newVal.length !==0){
-        useTableData.value = convertToObjectArrayFrom2DArray(newVal,tableHeader.value)
-        nextTick(() => {
-            window.scrollTo(0, 0);
-        });
+watch(
+  () => predictionStore.predictionList,
+  (nextPredictionList) => {
+    if (nextPredictionList.length > 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
-})
+  },
+)
 </script>
 
 <style scoped>
-#model-result-view{
-    font-family: 微软雅黑,serif;
-    color: #333333;
-    user-select: none;
-    border-radius: 0;
-    border-left: none;
+#model-result-view {
+  font-family: 'Microsoft YaHei', serif;
+  color: #333333;
+  user-select: none;
+  border-radius: 0;
+  border-left: none;
 }
 </style>

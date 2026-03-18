@@ -1,25 +1,63 @@
-import http from "@/api/http";
+import apiClient from '@/lib/http/api-client'
 
-export function connectDataSaveServer(){
-    return http.get('/qx/obtain/connect')
+export function connectDataSaveServer() {
+  return apiClient.get('/qx/obtain/connect', {
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function syncStationData(){
-    return http.get('/qx/obtain/sync/station')
+export function syncStationData() {
+  return apiClient.get('/qx/obtain/sync/station', {
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function syncDateRange(){
-    return http.get('/qx/obtain/sync/date_range')
+export function syncDateRange() {
+  return apiClient.get('/qx/obtain/sync/date_range', {
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function syncLatestDate(station){
-    return http.get('/qx/obtain/sync/latest_date?station=' + station)
+export function syncLatestDate(station) {
+  return apiClient.get('/qx/obtain/sync/latest_date', {
+    params: {
+      station,
+    },
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function syncHavingData(station){
-    return http.get('/qx/obtain/sync/exist?station=' + station)
+export function syncHavingData(station) {
+  return apiClient.get('/qx/obtain/sync/exist', {
+    params: {
+      station,
+    },
+    meta: {
+      auth: true,
+      retryOnTimeout: true,
+    },
+  })
 }
 
-export function syncMeteoDataByInfo(obj){
-    return http.json_auth_post('/qx/obtain/sync/meteo_data', obj)
+export function syncMeteoDataByInfo(apiObj) {
+  return apiClient.post('/qx/obtain/sync/meteo_data', apiObj, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    meta: {
+      auth: true,
+    },
+  })
 }

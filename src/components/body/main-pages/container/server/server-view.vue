@@ -1,95 +1,93 @@
 <template>
-  <el-card id="container-server" shadow="never" v-loading="serverData.loading">
-      <el-row>
-          <el-col :xs="8" :sm="6" :md="4" :lg="20" :xl="1" >
-              <span v-html="config.container.server.title"/>
-          </el-col>
-          <el-col :xs="8" :sm="6" :md="4" :lg="4" :xl="1" >
-              <el-select v-model="serverData.selectStation" >
-                  <el-option
-                          v-for="item in serverData.storeStationList"
-                          :key="item.station"
-                          :label="item.name"
-                          :value="item.station"
-                  />
-              </el-select>
-          </el-col>
-      </el-row>
-      <el-row :gutter="15">
-          <server-card :card-data="{title:config.container.server.card.station_name,content:serverData.stationName}"/>
-          <server-card :card-data="{title:config.container.server.card.start_date,content:serverData.startDate}"/>
-          <server-card :card-data="{title:config.container.server.card.running_status,content:'正常'}"/>
-      </el-row><br/>
-      <server-collection/>
+  <el-card id="container-server" shadow="never" v-loading="loading">
+    <el-row>
+      <el-col :xs="18" :sm="18" :md="18" :lg="20" :xl="20">
+        <span>{{ config.container.server.title }}</span>
+      </el-col>
+      <el-col :xs="6" :sm="6" :md="6" :lg="4" :xl="4">
+        <el-select v-model="selectStation">
+          <el-option
+            v-for="item in stationList"
+            :key="item.station"
+            :label="item.name"
+            :value="item.station"
+          />
+        </el-select>
+      </el-col>
+    </el-row>
+    <el-row :gutter="15">
+      <server-card :card-data="{ title: config.container.server.card.station_name, content: stationName }" />
+      <server-card :card-data="{ title: config.container.server.card.start_date, content: startDate }" />
+      <server-card :card-data="{ title: config.container.server.card.running_status, content: '正常' }" />
+    </el-row>
+    <br />
+    <server-collection />
   </el-card>
 </template>
 
 <script setup>
-import config from "@/config/main-page-config.json"
-import {useStore} from "vuex";
-import {reactive, watchEffect} from "vue";
-import ServerCard from "@/components/body/main-pages/container/server/server-card.vue";
-import {getStartDate} from "@/service/station-service";
-import {ElMessage} from "element-plus";
-import ServerCollection from "@/components/body/main-pages/container/server/server-collection.vue";
+import { computed, ref, watch } from 'vue'
+import { ElMessage } from 'element-plus'
+import config from '@/config/main-page-config.json'
+import ServerCard from '@/components/body/main-pages/container/server/server-card.vue'
+import ServerCollection from '@/components/body/main-pages/container/server/server-collection.vue'
+import { getStartDate } from '@/service/station-service'
+import { useMainPageStore } from '@/stores/main-page'
 
-const store = useStore()
-const serverData = reactive({
-    storeStationList:[],
-    selectStation:'',
-    loading:true,
-    stationName:'',
-    startDate:''
-})
-watchEffect(async () => {
-  if (store.state.mainPages.stationList){
-    serverData.storeStationList = store.state.mainPages.stationList
-    if (serverData.storeStationList.length !== 0) {
-      serverData.selectStation = await serverData.storeStationList[0].station
-    }
-    if (serverData.selectStation){
-      await store.dispatch('updateNowStation', serverData.selectStation)
-      serverData.stationName = serverData.storeStationList.find((item) => {
-        return item.station === serverData.selectStation
-      }).name
-      serverData.startDate = await getStartDate(serverData.selectStation)
-      if (serverData.startDate === ""){
-        ElMessage.error("内部服务错误，请重试")
-      }
-      serverData.loading = false
-    }
+const mainPageStore = useMainPageStore()
+const stationList = computed(() => mainPageStore.stationList)
+const selectStation = ref('')
+const stationName = ref('')
+const startDate = ref('')
+const loading = ref(false)
+
+async function loadStationSummary(station) {
+  if (!station) {
+    stationName.value = ''
+    startDate.value = ''
+    return
   }
-})
-watchEffect(async () => {
-    if (serverData.selectStation){
-        await store.dispatch('updateNowStation', serverData.selectStation)
-        serverData.stationName = serverData.storeStationList.find((item) => {
-            return item.station === serverData.selectStation
-        }).name
-        serverData.startDate = await getStartDate(serverData.selectStation)
-        if (serverData.startDate === ""){
-            ElMessage.error("内部服务错误，请重试")
-        }
-        serverData.loading = false
+
+  loading.value = true
+  mainPageStore.setCurrentStation(station)
+  stationName.value = stationList.value.find((item) => item.station === station)?.name ?? ''
+
+  const result = await getStartDate(station)
+  startDate.value = result.data
+  loading.value = false
+
+  if (!result.success) {
+    ElMessage.error(result.message)
+  }
+}
+
+watch(
+  stationList,
+  (nextStationList) => {
+    if (!selectStation.value && nextStationList.length > 0) {
+      selectStation.value = nextStationList[0].station
     }
-})
+  },
+  { immediate: true },
+)
+
+watch(selectStation, loadStationSummary, { immediate: true })
 </script>
 
 <style scoped>
-#container-server{
-    border-radius: 10px;
-    user-select: none;
-    font-family: 微软雅黑,serif;
+#container-server {
+  border-radius: 10px;
+  user-select: none;
+  font-family: 'Microsoft YaHei', serif;
+}
 
+#container-server span {
+  font-weight: 700;
+  font-size: larger;
 }
-#container-server span{
-    font-weight: bolder;
-    font-size: larger;
-}
-:deep(.el-input__wrapper) {
-    box-shadow: none;
-}
-:deep(.el-select:hover:not(.el-select--disabled) .el-input__wrapper){
-    box-shadow: none;
+
+:deep(.el-input__wrapper),
+:deep(.el-select:hover:not(.el-select--disabled) .el-input__wrapper) {
+  box-shadow: none;
 }
 </style>

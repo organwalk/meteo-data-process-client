@@ -1,21 +1,22 @@
 <template>
-    <el-col :xs="8" :sm="6" :md="4" :lg="8" :xl="1" align="left">
-        <h2 @click="nextToIndex">{{ config.logo.text }}</h2>
-    </el-col>
+  <el-col :xs="12" :sm="10" :md="8" :lg="8" :xl="8" align="left">
+    <h2 class="header-logo" @click="router.push('/')">{{ config.logo.text }}</h2>
+  </el-col>
 </template>
 
 <script setup>
-import config from "@/config/client-header-config.json"
-const nextToIndex = () => {
-    window.location.href = "/"
-}
+import { useRouter } from 'vue-router'
+import config from '@/config/client-header-config.json'
+
+const router = useRouter()
 </script>
 
 <style scoped>
-h2{
-    color: #333333;
-    font-family: "微软雅黑",serif;
-    user-select: none;
-    margin-top: 10px;
+.header-logo {
+  margin: 12px 0;
+  color: #333333;
+  font-family: 'Microsoft YaHei', serif;
+  user-select: none;
+  cursor: pointer;
 }
 </style>

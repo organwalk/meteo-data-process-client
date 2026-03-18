@@ -1,117 +1,157 @@
 <template>
-    <el-card shadow="never" style="border: none">
-        <el-row>
-            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" center>
-                <form>
-                    <el-input maxlength="11"
-                              show-word-limit
-                              v-model="authServiceData.auth.username"
-                              v-show="!authServiceData.showPassword"
-                              :placeholder="config.describe.auth.service.username_place"
-                              :prefix-icon="User"
-                              @keyup.enter="authServiceData.showPassword = checkOnlyEngAndNumber(authServiceData.auth.username)"
-                              size="large"/>
-                    <el-input
-                              class="password-input"
-                              :class="{ 'slide-in-from-right': authServiceData.showPassword }"
-                              v-model="authServiceData.auth.password"
-                              v-show="authServiceData.showPassword"
-                              :placeholder="config.describe.auth.service.password_place"
-                              :prefix-icon="Check"
-                              @keyup.enter="authToSystem()"
-                              type="password"
-                              show-password
-                              size="large"/>
-                </form>
-            </el-col>
-        </el-row>
-        <br/>
-        <el-row>
-            <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" align="left">
-                <el-popover
-                        placement="bottom"
-                        :width="200"
-                        trigger="click"
-                >
-                    <template #reference>
-                        <el-button text style="color: #2C6AE3" v-html="config.describe.auth.service.detail_button"/>
-                    </template>
-                    <span v-html="config.describe.auth.service.detail_des"/>
-                </el-popover>
-            </el-col>
-            <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" align="right">
-                <el-button @click="store.dispatch('updateKeepAuthViewOpen', false)"
-                           v-html="config.describe.auth.service.cancel_button" plain />
-                <el-button @click="authServiceData.showPassword = checkOnlyEngAndNumber(authServiceData.auth.username)"
-                           v-show="!authServiceData.showPassword"
-                           v-html="config.describe.auth.service.next_button" type="primary" color="#2C6AE3" />
-                <el-button @click="authToSystem()"
-                           v-show="authServiceData.showPassword"
-                           v-html="auth_button" type="primary" color="#2C6AE3" />
-            </el-col>
-        </el-row>
-    </el-card>
-
+  <el-card shadow="never" class="auth-service-card">
+    <el-row>
+      <el-col :span="24" center>
+        <form>
+          <el-input
+            v-if="!showPassword"
+            v-model.trim="form.username"
+            maxlength="11"
+            show-word-limit
+            size="large"
+            :placeholder="config.describe.auth.service.username_place"
+            :prefix-icon="User"
+            @keyup.enter="nextStep"
+          />
+          <el-input
+            v-else
+            v-model.trim="form.password"
+            class="password-input"
+            size="large"
+            type="password"
+            show-password
+            :placeholder="config.describe.auth.service.password_place"
+            :prefix-icon="Check"
+            @keyup.enter="submitAuth"
+          />
+        </form>
+      </el-col>
+    </el-row>
+    <br />
+    <el-row>
+      <el-col :span="12" align="left">
+        <el-popover placement="bottom" :width="220" trigger="click">
+          <template #reference>
+            <el-button text style="color: #2C6AE3">
+              {{ config.describe.auth.service.detail_button }}
+            </el-button>
+          </template>
+          <span v-html="config.describe.auth.service.detail_des" />
+        </el-popover>
+      </el-col>
+      <el-col :span="12" align="right">
+        <el-button plain @click="cancel" v-buttonAutoLoseFocus>
+          {{ config.describe.auth.service.cancel_button }}
+        </el-button>
+        <el-button
+          v-if="!showPassword"
+          type="primary"
+          color="#2C6AE3"
+          @click="nextStep"
+          v-buttonAutoLoseFocus
+        >
+          {{ config.describe.auth.service.next_button }}
+        </el-button>
+        <el-button v-else type="primary" color="#2C6AE3" @click="submitAuth" v-buttonAutoLoseFocus>
+          {{ submitButtonText }}
+        </el-button>
+      </el-col>
+    </el-row>
+  </el-card>
 </template>
 
 <script setup>
-import {User, Check} from "@element-plus/icons-vue";
-import config from "@/config/index-page-config.json";
-import {computed, reactive, ref, watchEffect} from "vue";
-import {useStore} from "vuex";
-import {checkOnlyEngAndNumber} from "@/utils/utils";
-import {loginToSystem, registerToSystem} from "@/service/auth-service";
+import { computed, reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { Check, User } from '@element-plus/icons-vue'
+import { useRoute, useRouter } from 'vue-router'
+import config from '@/config/index-page-config.json'
+import { useAuthStore } from '@/stores/auth'
+import { checkOnlyEngAndNumber } from '@/utils/utils'
+import { loginToSystem, registerToSystem } from '@/service/auth-service'
 
-const store = useStore()
-const authServiceData = reactive({
-    auth:{
-        username:'',
-        password:''
-    },
-    showPassword:false,
-    isLogin:false
+const router = useRouter()
+const route = useRoute()
+const authStore = useAuthStore()
+const showPassword = ref(false)
+const form = reactive({
+  username: '',
+  password: '',
 })
-const isLogin = computed(()=>authServiceData.isLogin)
-watchEffect(()=>{
-    if (isLogin.value){
-        store.dispatch('updateAuthLoading',true)
-    }else {
-        store.dispatch('updateAuthLoading',false)
-    }
+
+const submitButtonText = computed(() => {
+  return authStore.dialog.type === 'register'
+    ? config.describe.auth.service.register_button
+    : config.describe.auth.service.login_button
 })
-const auth_button = ref()
-const type = store.state.indexPages.keepAuthViewOpen.type
-if (type === "login"){
-    auth_button.value = config.describe.auth.service.login_button
-}else if (type === "register"){
-    auth_button.value = config.describe.auth.service.register_button
-}
-const authToSystem = () => {
-    if (type === "login") {
-        loginToSystem(authServiceData)
-    }else if (type === "register"){
-        registerToSystem(authServiceData)
-    }
+
+function cancel() {
+  showPassword.value = false
+  form.username = ''
+  form.password = ''
+  authStore.closeDialog()
 }
 
+function nextStep() {
+  if (!checkOnlyEngAndNumber(form.username)) {
+    ElMessage.error('用户名只能包含英文和数字')
+    return
+  }
+
+  showPassword.value = true
+}
+
+async function submitAuth() {
+  if (!checkOnlyEngAndNumber(form.password)) {
+    ElMessage.error('密码只能包含英文和数字')
+    return
+  }
+
+  authStore.setLoading(true)
+
+  if (authStore.dialog.type === 'register') {
+    const registerResult = await registerToSystem({
+      username: form.username,
+      password: form.password,
+    })
+
+    if (!registerResult.success) {
+      authStore.setLoading(false)
+      ElMessage.error(registerResult.message)
+      return
+    }
+
+    ElMessage.success(registerResult.message)
+  }
+
+  const loginResult = await loginToSystem({
+    username: form.username,
+    password: form.password,
+  })
+
+  authStore.setLoading(false)
+
+  if (!loginResult.success) {
+    ElMessage.error(loginResult.message)
+    showPassword.value = false
+    form.password = ''
+    return
+  }
+
+  authStore.updateSession(loginResult.auth)
+  authStore.closeDialog()
+  ElMessage.success(loginResult.message)
+  await router.replace(String(route.query.redirect || '/main'))
+}
 </script>
 
 <style scoped>
+.auth-service-card {
+  border: none;
+}
+
 .password-input {
-    position: relative;
-    overflow: hidden;
-}
-
-.slide-in-from-right {
-    animation: slideInFromRight 0.5s forwards;
-}
-
-@keyframes slideInFromRight {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(0);
-    }
+  position: relative;
+  overflow: hidden;
 }
 </style>

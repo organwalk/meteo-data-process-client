@@ -1,71 +1,58 @@
 <template>
-    <el-card :id="type === card.eng_type ? 'click-query-tab' : 'query-card'"
-             v-for="card in config.query.card"
-             :key="card" @click="toQuery(card.eng_type)" shadow="hover">
-        <span v-html="card.eng_type"/>
-        <h2 v-html="card.cn_type"/>
-        <h5 v-html="card.cn_des"/>
-    </el-card>
+  <el-card
+    v-for="card in config.query.card"
+    :key="card.eng_type"
+    class="query-card"
+    :class="{ 'query-card--active': queryType === card.eng_type }"
+    shadow="hover"
+    @click="mainPageStore.setQueryType(card.eng_type)"
+  >
+    <span>{{ card.eng_type }}</span>
+    <h2>{{ card.cn_type }}</h2>
+    <h5>{{ card.cn_des }}</h5>
+  </el-card>
 </template>
 
 <script setup>
-import config from "@/config/main-page-config.json";
-import { ref, watchEffect} from "vue";
-import {useStore} from "vuex";
+import { computed } from 'vue'
+import config from '@/config/main-page-config.json'
+import { useMainPageStore } from '@/stores/main-page'
 
-const store = useStore()
-const type = ref(null)
-
-const toQuery = async (val) => {
-    await store.dispatch('updateQueryType',val)
-
-}
-watchEffect(()=>{
-    type.value = store.state.mainPages.queryType
-})
+const mainPageStore = useMainPageStore()
+const queryType = computed(() => mainPageStore.queryType)
 </script>
 
 <style scoped>
-#query-card{
-    border-radius: 10px;
-    margin-bottom: 20px;
-    color: #333333;
-    height: 27vh;
+.query-card {
+  border-radius: 10px;
+  margin-bottom: 20px;
+  color: #333333;
+  min-height: 27vh;
+  cursor: pointer;
 }
-#query-card:hover{
-    background-color: #337ecc;
-    color: #ffffff;
-    height: 30vh;
+
+.query-card:hover {
+  background-color: #337ecc;
+  color: #ffffff;
 }
-#query-card span{
-    font-size: 15px;
-    font-weight: lighter;
+
+.query-card span {
+  font-size: 15px;
+  font-weight: 300;
 }
-#query-card h2{
-    margin-top: 0;
-    font-weight: bolder;
+
+.query-card h2 {
+  margin-top: 0;
+  font-weight: 700;
 }
-#query-card h5{
-    font-weight: lighter;
-    line-height: 1.5rem;
+
+.query-card h5 {
+  font-weight: 300;
+  line-height: 1.5rem;
 }
-#click-query-tab{
-    border-radius: 10px;
-    margin-bottom: 20px;
-    background-color: #409EFF;
-    color: #ffffff;
-    height: 27vh;
-}
-#click-query-tab span{
-    font-size: 15px;
-    font-weight: lighter;
-}
-#click-query-tab h2{
-    margin-top: 0;
-    font-weight: bolder;
-}
-#click-query-tab h5{
-    font-weight: lighter;
-    line-height: 1.5rem;
+
+.query-card--active {
+  background-color: #409eff;
+  color: #ffffff;
 }
 </style>

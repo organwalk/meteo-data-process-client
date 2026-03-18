@@ -1,85 +1,93 @@
-import * as echarts from "echarts";
+import * as echarts from 'echarts/core'
+import { GridComponent, TooltipComponent, VisualMapComponent } from 'echarts/components'
+import { HeatmapChart, LineChart } from 'echarts/charts'
+import { CanvasRenderer } from 'echarts/renderers'
 
-export function getADayMeteoChart(meteoDataList) {
-    const myChart = echarts.init(document.getElementById('aDayMeteoChart'));
-    myChart.setOption({
-        xAxis: {
-            type: 'category',
-            data: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00',
-                '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00',
-                '19:00', '20:00', '21:00', '22:00', '23:00']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: meteoDataList.map(data => ({
-            data: data.data,
-            type: 'line',
-            smooth: true,
-            symbol: 'none',
-            name: data.name
-        })),
-        grid: {
-            left: '4%',
-            right: '0%',
-            top: '10%',
-            bottom: '7%'
-        },
-        tooltip: {
-            trigger: 'axis',
-            extraCssText: 'border-radius: 15px;width: 120px; height: 80px;padding:20px;',
-            formatter: function (params) {
-                let result = '';
-                params.forEach(item => {
-                    result += `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${item.color}"></span><span style="font-size: 12px;">${item.seriesName}:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${item.value}</span><br>`;
-                });
-                return `<span style="font-size: 16px;font-weight: bolder;">${params[0].name}</span><br/><span style="font-size: 5px;color: #b2b2b2">Detail</span><br/>${result}`;
-            }
-        },
-    })
+echarts.use([GridComponent, TooltipComponent, VisualMapComponent, LineChart, HeatmapChart, CanvasRenderer])
+
+export function createADayMeteoChartOptions(meteoDataList) {
+  return {
+    xAxis: {
+      type: 'category',
+      data: Array.from({ length: 24 }, (_, index) => `${String(index).padStart(2, '0')}:00`),
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: meteoDataList.map((data) => ({
+      data: Array.isArray(data.data) ? data.data : [],
+      type: 'line',
+      smooth: true,
+      symbol: 'none',
+      name: data.name,
+    })),
+    grid: {
+      left: '4%',
+      right: '0%',
+      top: '10%',
+      bottom: '7%',
+    },
+    tooltip: {
+      trigger: 'axis',
+      extraCssText: 'border-radius: 15px; width: 120px; height: 80px; padding: 20px;',
+      formatter(params) {
+        const detail = params
+          .map((item) => {
+            return `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${item.color}"></span><span style="font-size:12px;">${item.seriesName}: ${item.value}</span>`
+          })
+          .join('<br>')
+
+        return `<span style="font-size: 16px; font-weight: bolder;">${params[0]?.name ?? ''}</span><br/><span style="font-size: 5px; color: #b2b2b2">Detail</span><br/>${detail}`
+      },
+    },
+  }
 }
 
+export function createCorrelationChartOptions(data, labels) {
+  const seriesData = []
 
-export function getCorrelationChart(data,labels) {
-    const myChart = echarts.init(document.getElementById('correlationChart'));
-    const seriesData = [];
-    for (let i = 0; i < data.length; i++) {
-        for (let j = 0; j < data[i].length; j++) {
-            seriesData.push({
-                name: labels[i] + ' - ' + labels[j],
-                value: [i, j, data[i][j]]
-            });
-        }
+  for (let rowIndex = 0; rowIndex < data.length; rowIndex += 1) {
+    for (let columnIndex = 0; columnIndex < data[rowIndex].length; columnIndex += 1) {
+      seriesData.push({
+        name: `${labels[rowIndex]} - ${labels[columnIndex]}`,
+        value: [rowIndex, columnIndex, data[rowIndex][columnIndex]],
+      })
     }
-    myChart.setOption({
-        xAxis: {
-            type: 'category',
-            data: labels
+  }
+
+  return {
+    xAxis: {
+      type: 'category',
+      data: labels,
+    },
+    yAxis: {
+      type: 'category',
+      data: labels,
+    },
+    visualMap: {
+      min: -1,
+      max: 1,
+      calculable: true,
+      orient: 'vertical',
+      left: 'right',
+      top: 'center',
+    },
+    series: [
+      {
+        type: 'heatmap',
+        data: seriesData,
+        label: {
+          show: true,
         },
-        yAxis: {
-            type: 'category',
-            data: labels
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
         },
-        visualMap: {
-            min: -1,
-            max: 1,
-            calculable: true,
-            orient: 'vertical',
-            left: 'right',
-            top: 'center'
-        },
-        series: [{
-            type: 'heatmap',
-            data: seriesData,
-            label: {
-                show: true
-            },
-            emphasis: {
-                itemStyle: {
-                    shadowBlur: 10,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }
-        }]
-    });
+      },
+    ],
+  }
 }
+
+export { echarts }

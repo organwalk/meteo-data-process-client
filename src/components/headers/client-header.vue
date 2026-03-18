@@ -1,36 +1,47 @@
 <template>
-    <el-row style="height: 10vh">
-        <el-col :xs="8" :sm="6" :md="4" :lg="1" :xl="1" />
-        <el-col :xs="24" :sm="24" :md="24" :lg="22" :xl="24" >
-            <el-row style="background-color: #ffffff">
-                <client-header-logo />
-                <el-col :xs="8" :sm="6" :md="4" :lg="4" :xl="1" />
-                <client-header-tab />
-            </el-row>
-        </el-col>
-        <el-col :xs="4" :sm="6" :md="8" :lg="1" :xl="11" />
-    </el-row>
-    <el-row>
-        <el-col :xs="8" :sm="6" :md="4" :lg="1" :xl="1" />
-        <el-col :xs="24" :sm="24" :md="24" :lg="22" :xl="24">
-            <div v-if="showLine" style="width: 100%;height: 1px;background-color: #c8c9cc"></div>
-        </el-col>
-        <el-col :xs="4" :sm="6" :md="8" :lg="1" :xl="11" />
-    </el-row>
-
+  <el-row class="client-header">
+    <el-col :xs="1" :sm="1" :md="1" :lg="1" :xl="1" />
+    <el-col :xs="22" :sm="22" :md="22" :lg="22" :xl="22">
+      <el-row class="client-header__inner">
+        <client-header-logo />
+        <el-col :xs="0" :sm="0" :md="2" :lg="4" :xl="4" />
+        <client-header-tab />
+      </el-row>
+    </el-col>
+    <el-col :xs="1" :sm="1" :md="1" :lg="1" :xl="1" />
+  </el-row>
+  <el-row v-if="showLine">
+    <el-col :xs="1" :sm="1" :md="1" :lg="1" :xl="1" />
+    <el-col :xs="22" :sm="22" :md="22" :lg="22" :xl="22">
+      <div class="client-header__divider"></div>
+    </el-col>
+    <el-col :xs="1" :sm="1" :md="1" :lg="1" :xl="1" />
+  </el-row>
 </template>
 
 <script setup>
-import ClientHeaderLogo from "@/components/headers/client-header-logo.vue";
-import ClientHeaderTab from "@/components/headers/client-header-tab.vue";
-import {ref} from "vue";
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import ClientHeaderLogo from '@/components/headers/client-header-logo.vue'
+import ClientHeaderTab from '@/components/headers/client-header-tab.vue'
 
-const showLine = ref(true)
-if (window.location.pathname !== "/") {
-    showLine.value = false
-}
+const route = useRoute()
+const showLine = computed(() => route.name === 'index')
 </script>
 
 <style scoped>
+.client-header {
+  min-height: 72px;
+}
 
+.client-header__inner {
+  align-items: center;
+  background-color: #ffffff;
+}
+
+.client-header__divider {
+  width: 100%;
+  height: 1px;
+  background-color: #dcdfe6;
+}
 </style>

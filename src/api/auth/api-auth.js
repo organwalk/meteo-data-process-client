@@ -1,12 +1,19 @@
-import http from "@/api/http";
+import apiClient from '@/lib/http/api-client'
+import { getAuthSession } from '@/lib/storage'
 
-export function login(userInfo){
-    return http.post('/user/login', userInfo)
-}
-export function register(userInfo){
-    return http.post('/user/register', userInfo)
+export function login(userInfo) {
+  return apiClient.post('/user/login', userInfo)
 }
 
-export function signOut(){
-    return http.query_post('/user/logout?username='+JSON.parse(sessionStorage.getItem("auth")).name)
+export function register(userInfo) {
+  return apiClient.post('/user/register', userInfo)
+}
+
+export function signOut() {
+  const authSession = getAuthSession()
+  return apiClient.post('/user/logout', null, {
+    params: {
+      username: authSession?.name ?? '',
+    },
+  })
 }

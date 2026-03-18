@@ -2,58 +2,58 @@
   "query": {
     "card": [
       {
-        "eng_type":"Query by hour",
+        "eng_type": "Query by hour",
         "cn_type": "分钟数据查询",
-        "cn_des": "以分钟为单位，查询指定日期的某一个小时的气象数据变化数据。结果集中将包含六十条数据值"
+        "cn_des": "以分钟为单位，查询指定日期某一小时内的气象数据变化情况"
       },
       {
-        "eng_type":"Query by day",
+        "eng_type": "Query by day",
         "cn_type": "小时数据查询",
-        "cn_des": "以小时为单位，查询指定日期的某一天的气象数据变化数据。结果集中将包含二十四条数据值"
+        "cn_des": "以小时为单位，查询指定日期某一天的气象数据变化情况"
       },
       {
-        "eng_type":"Query by date",
+        "eng_type": "Query by date",
         "cn_type": "时段数据查询",
-        "cn_des": "以一天为单位，查询指定时间段的气象数据变化数据。结果集中将包含与指定天数相等条数的数据值"
+        "cn_des": "以天为单位，查询指定时间段内的气象数据变化情况"
       },
       {
-        "eng_type":"Query by condition",
+        "eng_type": "Query by condition",
         "cn_type": "复合条件查询",
-        "cn_des": "查询指定气象要素范围条件的气象数据变化数据。结果集中将包含匹配用户指定复合条件的数据值"
+        "cn_des": "根据多个气象要素范围组合查询满足条件的数据"
       }
     ]
   },
-  "container":{
+  "container": {
     "chart": {
       "title": "最近日期气象数据",
-      "MeteoElements": [
+      "meteo_elements": [
         {
-          "value":"1",
-          "label":"温度"
+          "value": "1",
+          "label": "温度"
         },
         {
-          "value":"2",
-          "label":"湿度"
+          "value": "2",
+          "label": "湿度"
         },
         {
-          "value":"3",
-          "label":"风速"
+          "value": "3",
+          "label": "风速"
         },
         {
-          "value":"5",
-          "label":"降雨量"
+          "value": "5",
+          "label": "降雨量"
         },
         {
-          "value":"6",
-          "label":"光照"
+          "value": "6",
+          "label": "光照"
         },
         {
-          "value":"7",
-          "label":"PM25"
+          "value": "7",
+          "label": "PM25"
         },
         {
-          "value":"8",
-          "label":"PM10"
+          "value": "8",
+          "label": "PM10"
         }
       ]
     },
@@ -75,7 +75,7 @@
     },
     "query": {
       "header": {
-        "button": "Back",
+        "button": "返回",
         "Query by hour": {
           "title": "分钟数据查询"
         },
@@ -93,36 +93,36 @@
         "collapse_title": "展开面板填写查询气象数据所需信息",
         "meteo_elements": [
           {
-            "value":"1",
-            "label":"温度"
+            "value": "1",
+            "label": "温度"
           },
           {
-            "value":"2",
-            "label":"湿度"
+            "value": "2",
+            "label": "湿度"
           },
           {
-            "value":"3",
-            "label":"风速"
+            "value": "3",
+            "label": "风速"
           },
           {
-            "value":"4",
-            "label":"风向"
+            "value": "4",
+            "label": "风向"
           },
           {
-            "value":"5",
-            "label":"降雨量"
+            "value": "5",
+            "label": "降雨量"
           },
           {
-            "value":"6",
-            "label":"光照"
+            "value": "6",
+            "label": "光照"
           },
           {
-            "value":"7",
-            "label":"PM25"
+            "value": "7",
+            "label": "PM25"
           },
           {
-            "value":"8",
-            "label":"PM10"
+            "value": "8",
+            "label": "PM10"
           }
         ],
         "label": {
